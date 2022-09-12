@@ -1,13 +1,14 @@
-package com.mavs.backend.helpers;
+package com.mavs.backend.helper;
 
 import org.springframework.stereotype.Component;
 
 @Component
 public class ResponseMessage {
     
-    private String message;
+    public String message;
 
     public ResponseMessage() {
+
     }
 
     public ResponseMessage(String message) {
@@ -26,4 +27,7 @@ public class ResponseMessage {
     public String toString() {
         return "ResponseMessage [message=" + message + "]";
     }
+
+    
+    
 }

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.mavs.backend.daos.product.ProductDao;
 import com.mavs.backend.entities.product.Product;
-import com.mavs.backend.helpers.ResponseMessage;
+import com.mavs.backend.helper.ResponseMessage;
 
 @Repository
 @Component
