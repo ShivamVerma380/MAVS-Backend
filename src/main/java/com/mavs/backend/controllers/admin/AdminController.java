@@ -1,4 +1,4 @@
-package com.mavs.backend.controllers;
+package com.mavs.backend.controllers.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mavs.backend.helper.ResponseMessage;
-import com.mavs.backend.services.AdminService;
+import com.mavs.backend.services.admin.AdminService;
 
 @RestController
 public class AdminController {

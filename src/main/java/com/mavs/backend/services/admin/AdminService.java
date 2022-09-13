@@ -1,4 +1,4 @@
-package com.mavs.backend.services;
+package com.mavs.backend.services.admin;
 
 import java.security.DrbgParameters.Reseed;
 
@@ -11,11 +11,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import com.mavs.backend.config.MySecurityConfig;
-import com.mavs.backend.daos.AdminDao;
-import com.mavs.backend.entities.Admin;
+import com.mavs.backend.daos.admin.AdminDao;
 import com.mavs.backend.entities.JwtResponse;
+import com.mavs.backend.entities.admin.Admin;
 import com.mavs.backend.helper.JwtUtil;
 import com.mavs.backend.helper.ResponseMessage;
+import com.mavs.backend.services.CustomUserDetailsService;
 
 @Component
 public class AdminService {
