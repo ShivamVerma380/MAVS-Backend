@@ -1,5 +1,9 @@
 package com.mavs.backend.services.product;
 
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +16,7 @@ import com.mavs.backend.daos.product.ProductDao;
 import com.mavs.backend.entities.admin.Admin;
 import com.mavs.backend.entities.product.Product;
 import com.mavs.backend.helper.JwtUtil;
+import com.mavs.backend.helper.ProductsDetailsResponse;
 import com.mavs.backend.helper.ResponseMessage;
 
 @Repository
@@ -64,6 +69,32 @@ public class ProductService {
             return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
 
         }catch(Exception e){
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    public ResponseEntity<?> getProducts(){
+        try {
+            List<Product> productDetails = productDao.findAll();
+            List<ProductsDetailsResponse> productsDetailsResponses = new ArrayList<>();
+            for(int i=0;i<productDetails.size();i++){
+                ProductsDetailsResponse productsDetailsResponse = new ProductsDetailsResponse();
+                productsDetailsResponse.setModelNumber(productDetails.get(i).getModelNumber());
+                productsDetailsResponse.setProductName(productDetails.get(i).getProductName());
+                productsDetailsResponse.setOfferPrice(productDetails.get(i).getOfferPrice());
+                productsDetailsResponse.setProductPrice(productDetails.get(i).getProductPrice());
+                productsDetailsResponse.setProductImage1(productDetails.get(i).getProductImage1());
+                productsDetailsResponse.setProductHighlights(productDetails.get(i).getProductHighlights());
+                
+                productsDetailsResponses.add(productsDetailsResponse);
+                
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(productsDetailsResponses);
+
+        } catch (Exception e) {
+            // TODO: handle exception
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);

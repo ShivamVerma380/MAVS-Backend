@@ -1,9 +1,11 @@
 package com.mavs.backend.controllers.product;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,6 +32,18 @@ public class ProductController {
             return productService.addProductDetail(modelNumber, productName, productHighlights, productPrice, offerPrice, productImage1, productImage2, productImage3, productImage4, productImage5, authorization);
         }
         catch(Exception e){
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    @GetMapping("/get-products")
+    public ResponseEntity<?> getProducts(){
+        try {
+            return productService.getProducts();
+        } catch (Exception e) {
+            // TODO: handle exception
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
