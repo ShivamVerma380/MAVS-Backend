@@ -14,8 +14,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import com.mavs.backend.daos.AdminDao;
-import com.mavs.backend.entities.Admin;
+import com.mavs.backend.daos.admin.AdminDao;
+import com.mavs.backend.entities.admin.Admin;
 import com.mavs.backend.helper.JwtUtil;
 
 @Component

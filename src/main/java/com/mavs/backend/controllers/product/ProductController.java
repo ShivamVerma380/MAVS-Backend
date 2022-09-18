@@ -25,9 +25,9 @@ public class ProductController {
     @PostMapping("/add-product")
     @CrossOrigin(origins = "*")
     public ResponseEntity<?> addProduct(@RequestParam("modelNumber") String modelNumber,@RequestParam("productName") String productName,@RequestParam("productHighlights") String productHighlights,@RequestParam("productPrice") String productPrice,@RequestParam("offerPrice") String offerPrice,@RequestParam("productImage1") String productImage1,
-    @RequestParam("productImage2")String productImage2,@RequestParam("productImage3") String productImage3,@RequestParam("productImage4") String productImage4,@RequestParam("productImage5") String productImage5){
+    @RequestParam("productImage2")String productImage2,@RequestParam("productImage3") String productImage3,@RequestParam("productImage4") String productImage4,@RequestParam("productImage5") String productImage5,@RequestHeader("Authorization") String authorization){
         try{
-            return productService.addProductDetail(modelNumber, productName, productHighlights, productPrice, offerPrice, productImage1, productImage2, productImage3, productImage4, productImage5);
+            return productService.addProductDetail(modelNumber, productName, productHighlights, productPrice, offerPrice, productImage1, productImage2, productImage3, productImage4, productImage5, authorization);
         }
         catch(Exception e){
             e.printStackTrace();
