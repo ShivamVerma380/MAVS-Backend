@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.mavs.backend.config.MySecurityConfig;
@@ -15,6 +16,7 @@ import com.mavs.backend.daos.admin.AdminDao;
 import com.mavs.backend.entities.JwtResponse;
 import com.mavs.backend.entities.admin.Admin;
 import com.mavs.backend.helper.JwtUtil;
+import com.mavs.backend.helper.LoginResponse;
 import com.mavs.backend.helper.ResponseMessage;
 import com.mavs.backend.services.CustomUserDetailsService;
 
@@ -37,6 +39,9 @@ public class AdminService {
 
     @Autowired
     public ResponseMessage responseMessage;
+
+    @Autowired
+    public LoginResponse loginResponse;
 
     @Autowired
     public JwtUtil jwtUtil;
@@ -73,6 +78,35 @@ public class AdminService {
             jwtResponse.setToken(token);
             return ResponseEntity.status(HttpStatus.OK).body(jwtResponse);
         } catch (Exception e) {
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    public ResponseEntity<?> loginAdmin(String email,String password){
+        try {
+            Admin admin = adminDao.findAdminByEmail(email);
+            if(admin!=null){
+                BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+                if(bCryptPasswordEncoder.matches(password, admin.getPassword())){
+                    loginResponse.setMessage(admin.getName()+" logged in successfully!");
+                    
+
+                    
+                    return ResponseEntity.status(HttpStatus.OK).body(loginResponse);
+                }
+                responseMessage.setMessage("Bad Credentials");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }else{
+                responseMessage.setMessage("User Not Found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+            }
+
+            
+            
+        } catch (Exception e) {
+            // TODO: handle exception
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
