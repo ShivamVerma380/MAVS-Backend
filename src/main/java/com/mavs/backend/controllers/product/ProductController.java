@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -44,6 +45,17 @@ public class ProductController {
             return productService.getProducts();
         } catch (Exception e) {
             // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    @PostMapping("/description/{modelNumber}")
+    public ResponseEntity<?> addDescription(@RequestHeader("Authorization") String authorization,@PathVariable("modelNumber") String modelNumber,@RequestParam("title") String title, @RequestParam("description") String description,@RequestParam("image") String image){
+        try {
+            return productService.addDescription(authorization, modelNumber, title, description, image);
+        } catch (Exception e) {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);

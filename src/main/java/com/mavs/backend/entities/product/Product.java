@@ -1,5 +1,7 @@
 package com.mavs.backend.entities.product;
 
+import java.util.ArrayList;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.stereotype.Component;
@@ -34,13 +36,15 @@ public class Product {
 
         private String offerPrice;
 
+        private ArrayList<ProductDescription> productDescriptions;
+
         public Product() {
         }
 
         public Product(String modelNumber, String productId, String productName, String productHighlights,
                 String productImage1, String productImage2, String productImage3, String productImage4,
                 String productImage5, String productPrice, String productVideoLink, String productCategory,
-                String offerPrice) {
+                String offerPrice,ArrayList<ProductDescription> productDescriptions) {
             this.modelNumber = modelNumber;
             this.productId = productId;
             this.productName = productName;
@@ -53,6 +57,7 @@ public class Product {
             this.productPrice = productPrice;
             this.productVideoLink = productVideoLink;
             this.productCategory = productCategory;
+            this.productDescriptions = productDescriptions;
             this.offerPrice = offerPrice;
         }
 
@@ -62,6 +67,15 @@ public class Product {
 
         public void setModelNumber(String modelNumber) {
             this.modelNumber = modelNumber;
+        }
+
+        public ArrayList<ProductDescription> getProductDescriptions() {
+            return productDescriptions;
+        }
+
+
+        public void setProductDescriptions(ArrayList<ProductDescription> productDescriptions) {
+            this.productDescriptions = productDescriptions;
         }
 
         public String getProductId() {
@@ -166,7 +180,8 @@ public class Product {
                     + productCategory + ", productHighlights=" + productHighlights + ", productId=" + productId
                     + ", productImage1=" + productImage1 + ", productImage2=" + productImage2 + ", productImage3="
                     + productImage3 + ", productImage4=" + productImage4 + ", productImage5=" + productImage5
-                    + ", productName=" + productName + ", productPrice=" + productPrice + ", productVideoLink="
+                    + ", productName=" + productName + ", productPrice=" + productPrice + ", productDescriptions="
+                    + productDescriptions + ", productVideoLink="
                     + productVideoLink + "]";
         }
 }

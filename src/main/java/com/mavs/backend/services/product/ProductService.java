@@ -15,6 +15,7 @@ import com.mavs.backend.daos.admin.AdminDao;
 import com.mavs.backend.daos.product.ProductDao;
 import com.mavs.backend.entities.admin.Admin;
 import com.mavs.backend.entities.product.Product;
+import com.mavs.backend.entities.product.ProductDescription;
 import com.mavs.backend.helper.JwtUtil;
 import com.mavs.backend.helper.ProductsDetailsResponse;
 import com.mavs.backend.helper.ResponseMessage;
@@ -93,6 +94,38 @@ public class ProductService {
             }
             return ResponseEntity.status(HttpStatus.OK).body(productsDetailsResponses);
 
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    public ResponseEntity<?> addDescription(String authorization,String modelNumber,String title,String description,String image){
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            admin = adminDao.findAdminByEmail(email);
+            if(admin==null){
+                responseMessage.setMessage("Only admin can add description");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+            Product product = productDao.findProductBymodelNumber(modelNumber);
+            if(product==null){
+                responseMessage.setMessage("Product Not found");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+            ArrayList<ProductDescription> list = product.getProductDescriptions();
+            if(list==null){
+                list = new ArrayList<>();
+            }
+            ProductDescription productDescription = new ProductDescription(title,description,image);
+            list.add(productDescription);
+            product.setProductDescriptions(list);
+            productDao.save(product);
+            responseMessage.setMessage("Product Details updated Successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
         } catch (Exception e) {
             // TODO: handle exception
             e.printStackTrace();

@@ -71,6 +71,13 @@ public class ExcelHelper {
     @Autowired
     public ProductDao productDao;
 
+    public static boolean checkFileType(MultipartFile multipartFile){
+        String contentType = multipartFile.getContentType();
+        if(contentType.equals("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+            return true;
+        return false;
+    }
+
     
     public ResponseEntity<?> addProducts(InputStream inputStream) {
         try {
