@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.mavs.backend.daos.admin.AdminDao;
 import com.mavs.backend.daos.product.ProductDao;
 import com.mavs.backend.entities.admin.Admin;
+import com.mavs.backend.entities.product.AdditionalFeatures;
 import com.mavs.backend.entities.product.Product;
 import com.mavs.backend.entities.product.ProductDescription;
 import com.mavs.backend.helper.JwtUtil;
@@ -40,8 +41,7 @@ public class ProductService {
     public Admin admin;
     
     public ResponseEntity<?> addProductDetail( String modelNumber,String productName, String productHighlights,
-            String productPrice,String offerPrice, String productImage1, String productImage2, String productImage3,
-            String productImage4, String productImage5,String authorization) {
+            String productPrice, String productImage1, String productImage2, String productImage3,String videoLink,String productCategory,String authorization) {
         try {
             String token = authorization.substring(7);
             String email = jwtUtil.extractUsername(token);
@@ -57,12 +57,10 @@ public class ProductService {
             productDetail.setProductImage1(productImage1);
             productDetail.setProductImage2(productImage2);
             productDetail.setProductImage3(productImage3);
-            productDetail.setProductImage4(productImage4);
-            productDetail.setProductImage5(productImage5);
-            
+            productDetail.setProductCategory(productCategory);
+            productDetail.setProductVideoLink(videoLink);
             productDetail.setProductPrice(productPrice);
             productDetail.setProductName(productName);
-            productDetail.setOfferPrice(offerPrice);
             
             
             productDao.save(productDetail);
@@ -84,10 +82,14 @@ public class ProductService {
                 ProductsDetailsResponse productsDetailsResponse = new ProductsDetailsResponse();
                 productsDetailsResponse.setModelNumber(productDetails.get(i).getModelNumber());
                 productsDetailsResponse.setProductName(productDetails.get(i).getProductName());
-                productsDetailsResponse.setOfferPrice(productDetails.get(i).getOfferPrice());
+                
                 productsDetailsResponse.setProductPrice(productDetails.get(i).getProductPrice());
                 productsDetailsResponse.setProductImage1(productDetails.get(i).getProductImage1());
+                productsDetailsResponse.setProductImage2(productDetails.get(i).getProductImage2());
+                productsDetailsResponse.setProductImage3(productDetails.get(i).getProductImage3());
+                productsDetailsResponse.setVideoLink(productDetails.get(i).getProductVideoLink());
                 productsDetailsResponse.setProductHighlights(productDetails.get(i).getProductHighlights());
+                productsDetailsResponse.setProductDescriptions(productDetails.get(i).getProductDescriptions());
                 
                 productsDetailsResponses.add(productsDetailsResponse);
                 
@@ -126,6 +128,40 @@ public class ProductService {
             productDao.save(product);
             responseMessage.setMessage("Product Details updated Successfully");
             return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    public ResponseEntity<?> addAditionalFeatures(String authorization,String title,String description,String modelNumber){
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            admin = adminDao.findAdminByEmail(email);
+            if(admin==null){
+                responseMessage.setMessage("Only admin can add description");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+            Product product = productDao.findProductBymodelNumber(modelNumber);
+            if(product==null){
+                responseMessage.setMessage("Product Not found");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+            ArrayList<AdditionalFeatures> list = product.getAdditionalFeatures();
+            if(list==null){
+                list = new ArrayList<>();
+            }
+            AdditionalFeatures additionalFeatures = new AdditionalFeatures(title,description);
+            list.add(additionalFeatures);
+            product.setAdditionalFeatures(list);
+            productDao.save(product);
+            responseMessage.setMessage("Product Details updated Successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+
+            
         } catch (Exception e) {
             // TODO: handle exception
             e.printStackTrace();

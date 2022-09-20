@@ -1,14 +1,16 @@
 package com.mavs.backend.helper;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.springframework.stereotype.Component;
 
+import com.mavs.backend.entities.product.AdditionalFeatures;
+import com.mavs.backend.entities.product.ProductDescription;
+
 @Component
 public class ProductsDetailsResponse {
     public String modelNumber;
-
-    
 
     private String productName;
 
@@ -16,31 +18,38 @@ public class ProductsDetailsResponse {
     
     private String productImage1;
 
-    private String OfferPrice;
+    private String productImage2;
+
+    private String productImage3;
+
+    private String videoLink;
 
     private String productPrice;
 
+    private ArrayList<ProductDescription> productDescriptions;
+
+    private ArrayList<AdditionalFeatures> additionalFeatures;
     
 
     public ProductsDetailsResponse() {
     }
 
 
-    
-
 
     public ProductsDetailsResponse(String modelNumber, String productName, String productHighlights,
-            String productImage1, String offerPrice, String productPrice, HashMap<String, String> subCategoryMap,
-            String category, HashMap<String, String> filtercriterias) {
+            String productImage1, String productImage2, String productImage3, String videoLink, String productPrice,
+            ArrayList<ProductDescription> productDescriptions,ArrayList<AdditionalFeatures> additionalFeatures) {
         this.modelNumber = modelNumber;
         this.productName = productName;
         this.productHighlights = productHighlights;
         this.productImage1 = productImage1;
-        OfferPrice = offerPrice;
+        this.productImage2 = productImage2;
+        this.productImage3 = productImage3;
+        this.videoLink = videoLink;
         this.productPrice = productPrice;
+        this.productDescriptions = productDescriptions;
+        this.additionalFeatures = additionalFeatures;
     }
-
-
 
 
 
@@ -49,9 +58,11 @@ public class ProductsDetailsResponse {
     }
 
 
+
     public void setModelNumber(String modelNumber) {
         this.modelNumber = modelNumber;
     }
+
 
 
     public String getProductName() {
@@ -59,9 +70,11 @@ public class ProductsDetailsResponse {
     }
 
 
+
     public void setProductName(String productName) {
         this.productName = productName;
     }
+
 
 
     public String getProductHighlights() {
@@ -69,9 +82,11 @@ public class ProductsDetailsResponse {
     }
 
 
+
     public void setProductHighlights(String productHighlights) {
         this.productHighlights = productHighlights;
     }
+
 
 
     public String getProductImage1() {
@@ -79,24 +94,53 @@ public class ProductsDetailsResponse {
     }
 
 
+
     public void setProductImage1(String productImage1) {
         this.productImage1 = productImage1;
     }
 
 
-    public String getOfferPrice() {
-        return OfferPrice;
+
+    public String getProductImage2() {
+        return productImage2;
     }
 
 
-    public void setOfferPrice(String offerPrice) {
-        OfferPrice = offerPrice;
+
+    public void setProductImage2(String productImage2) {
+        this.productImage2 = productImage2;
     }
+
+
+
+    public String getProductImage3() {
+        return productImage3;
+    }
+
+
+
+    public void setProductImage3(String productImage3) {
+        this.productImage3 = productImage3;
+    }
+
+
+
+    public String getVideoLink() {
+        return videoLink;
+    }
+
+
+
+    public void setVideoLink(String videoLink) {
+        this.videoLink = videoLink;
+    }
+
 
 
     public String getProductPrice() {
         return productPrice;
     }
+
 
 
     public void setProductPrice(String productPrice) {
@@ -105,12 +149,44 @@ public class ProductsDetailsResponse {
 
 
 
+    public ArrayList<ProductDescription> getProductDescriptions() {
+        return productDescriptions;
+    }
+
+
+
+    public void setProductDescriptions(ArrayList<ProductDescription> productDescriptions) {
+        this.productDescriptions = productDescriptions;
+    }
+
+
+
+   
+
+
+
     @Override
     public String toString() {
-        return "ProductsDetailsResponse [OfferPrice=" + OfferPrice +  ", modelNumber=" + modelNumber + ", productHighlights=" + productHighlights
-                + ", productImage1=" + productImage1 + ", productName=" + productName
-                + ", productPrice=" + productPrice + "]";
+        return "ProductsDetailsResponse [additionalFeatures=" + additionalFeatures + ", modelNumber=" + modelNumber
+                + ", productDescriptions=" + productDescriptions + ", productHighlights=" + productHighlights
+                + ", productImage1=" + productImage1 + ", productImage2=" + productImage2 + ", productImage3="
+                + productImage3 + ", productName=" + productName + ", productPrice=" + productPrice + ", videoLink="
+                + videoLink + "]";
     }
+
+
+
+    public ArrayList<AdditionalFeatures> getAdditionalFeatures() {
+        return additionalFeatures;
+    }
+
+
+
+    public void setAdditionalFeatures(ArrayList<AdditionalFeatures> additionalFeatures) {
+        this.additionalFeatures = additionalFeatures;
+    }
+
+    
 
 
 }

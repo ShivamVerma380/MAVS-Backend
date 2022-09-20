@@ -215,7 +215,7 @@ public class ExcelHelper {
                             try {
                                 value = formatter.formatCellValue(cell);
                                 if(productDetail==null || value.trim().equals("-")) break;
-                                productDetail.setProductImage4(value);
+                                productDetail.setProductVideoLink(value);
                                 // imageUrl = new URL(value);
                                 // image = ImageIO.read(imageUrl);
                                 // byteArrayOutputStream = new ByteArrayOutputStream();
@@ -229,25 +229,8 @@ public class ExcelHelper {
                                 flag = false;
                             }
                         break;
+                        
                         case 7:
-                            try {
-                                value = formatter.formatCellValue(cell);
-                                if(productDetail==null || value.trim().equals("-")) break;
-                                productDetail.setProductImage5(value);
-                                // imageUrl = new URL(value);
-                                // image = ImageIO.read(imageUrl);
-                                // byteArrayOutputStream = new ByteArrayOutputStream();
-                                // ImageIO.write(image,"jpeg",byteArrayOutputStream);
-                                // fileName = "sample.jpeg";
-                                // multipartFile = new MockMultipartFile(fileName,fileName,"jpeg",byteArrayOutputStream.toByteArray());
-                                // productDetail.setProductImage5(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
-                            } catch (Exception e) {
-                                System.out.println("Product Image 5:"+productDetail.getModelNumber());
-                                // e.printStackTrace();
-                                flag = false;
-                            }
-                        break;
-                        case 8:
                             try {
                                 value = formatter.formatCellValue(cell);
                                 if(productDetail==null || value.trim().equals("-")) break;
@@ -258,18 +241,8 @@ public class ExcelHelper {
                                 flag = false;
                             }
                         break;
+                        
                         case 9:
-                            try {
-                                value = formatter.formatCellValue(cell);
-                                if(productDetail==null || value.trim().equals("-")) break;
-                                productDetail.setOfferPrice(value);
-                            } catch (Exception e) {
-                                System.out.println("Offer Price:"+productDetail.getModelNumber());
-                                // e.printStackTrace();
-                                flag = false;
-                            }
-                        break;
-                        case 10:
                             try {
                                 value = formatter.formatCellValue(cell);
                                 if(productDetail==null || value.trim().equals("-")) break;

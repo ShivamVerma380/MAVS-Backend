@@ -24,27 +24,24 @@ public class Product {
         
         private String productImage3;
         
-        private String productImage4;
-        
-        private String productImage5;
-        
         private String productPrice;
         
         private String productVideoLink;
         
         private String productCategory;
 
-        private String offerPrice;
-
         private ArrayList<ProductDescription> productDescriptions;
+
+        private ArrayList<AdditionalFeatures> additionalFeatures;
+
+        
 
         public Product() {
         }
 
         public Product(String modelNumber, String productId, String productName, String productHighlights,
-                String productImage1, String productImage2, String productImage3, String productImage4,
-                String productImage5, String productPrice, String productVideoLink, String productCategory,
-                String offerPrice,ArrayList<ProductDescription> productDescriptions) {
+                String productImage1, String productImage2, String productImage3, String productPrice, String productVideoLink, String productCategory,
+                ArrayList<ProductDescription> productDescriptions,ArrayList<AdditionalFeatures> additionalFeatures) {
             this.modelNumber = modelNumber;
             this.productId = productId;
             this.productName = productName;
@@ -52,17 +49,23 @@ public class Product {
             this.productImage1 = productImage1;
             this.productImage2 = productImage2;
             this.productImage3 = productImage3;
-            this.productImage4 = productImage4;
-            this.productImage5 = productImage5;
             this.productPrice = productPrice;
             this.productVideoLink = productVideoLink;
             this.productCategory = productCategory;
             this.productDescriptions = productDescriptions;
-            this.offerPrice = offerPrice;
+            this.additionalFeatures = additionalFeatures;
         }
 
         public String getModelNumber() {
             return modelNumber;
+        }
+
+        public ArrayList<AdditionalFeatures> getAdditionalFeatures() {
+            return additionalFeatures;
+        }
+
+        public void setAdditionalFeatures(ArrayList<AdditionalFeatures> additionalFeatures) {
+            this.additionalFeatures = additionalFeatures;
         }
 
         public void setModelNumber(String modelNumber) {
@@ -126,21 +129,6 @@ public class Product {
             this.productImage3 = productImage3;
         }
 
-        public String getProductImage4() {
-            return productImage4;
-        }
-
-        public void setProductImage4(String productImage4) {
-            this.productImage4 = productImage4;
-        }
-
-        public String getProductImage5() {
-            return productImage5;
-        }
-
-        public void setProductImage5(String productImage5) {
-            this.productImage5 = productImage5;
-        }
 
         public String getProductPrice() {
             return productPrice;
@@ -166,22 +154,16 @@ public class Product {
             this.productCategory = productCategory;
         }
 
-        public String getOfferPrice() {
-            return offerPrice;
-        }
-
-        public void setOfferPrice(String offerPrice) {
-            this.offerPrice = offerPrice;
-        }
-
         @Override
         public String toString() {
-            return "Product [modelNumber=" + modelNumber + ", offerPrice=" + offerPrice + ", productCategory="
-                    + productCategory + ", productHighlights=" + productHighlights + ", productId=" + productId
-                    + ", productImage1=" + productImage1 + ", productImage2=" + productImage2 + ", productImage3="
-                    + productImage3 + ", productImage4=" + productImage4 + ", productImage5=" + productImage5
-                    + ", productName=" + productName + ", productPrice=" + productPrice + ", productDescriptions="
-                    + productDescriptions + ", productVideoLink="
+            return "Product [additionalFeatures=" + additionalFeatures + ", modelNumber=" + modelNumber
+                    + ", productCategory=" + productCategory + ", productDescriptions=" + productDescriptions
+                    + ", productHighlights=" + productHighlights + ", productId=" + productId + ", productImage1="
+                    + productImage1 + ", productImage2=" + productImage2 + ", productImage3=" + productImage3
+                    + ", productName=" + productName + ", productPrice=" + productPrice + ", productVideoLink="
                     + productVideoLink + "]";
         }
+
+
+        
 }
