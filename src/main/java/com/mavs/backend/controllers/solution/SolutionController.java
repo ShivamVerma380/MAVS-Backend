@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -56,6 +57,18 @@ public class SolutionController {
     public ResponseEntity<?> addSolutionBenefits(@RequestHeader("Authorization") String authorization,@PathVariable("title") String title,@RequestParam("name") String name,@RequestParam("description") String description,@RequestParam("icon") String icon){
         try {
             return solutionService.addSolutionBenefits(name, description, icon, title, authorization);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    @GetMapping("/solutions")
+    public ResponseEntity<?> getAllSolutions(){
+        try {
+            return solutionService.getAllSolutions();
         } catch (Exception e) {
             // TODO: handle exception
             e.printStackTrace();

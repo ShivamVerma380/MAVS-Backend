@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.mavs.backend.daos.admin.AdminDao;
 import com.mavs.backend.daos.product.ProductDao;
@@ -148,6 +149,34 @@ public class SolutionService {
 
             responseMessage.setMessage("Solution Details updated Successfully");
             return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    public ResponseEntity<?> getAllSolutions(){
+        try {
+            List<Solution> solutions = solutionDao.findAll();
+            List<Solution> solutionResponses = new ArrayList<>();
+            for(int i=0;i<solutions.size();i++){
+                Solution solutionResponse = new Solution();
+                solutionResponse.setTitle(solutions.get(i).getTitle());
+                solutionResponse.setDescription(solutions.get(i).getDescription());
+                solutionResponse.setCoverimg(solutions.get(i).getCoverimg());
+                solutionResponse.setSolimg1(solutions.get(i).getSolimg1());
+                solutionResponse.setSolimg2(solutions.get(i).getSolimg2());
+                solutionResponse.setSolimg3(solutions.get(i).getSolimg3());
+                solutionResponse.setProductused(solutions.get(i).getProductused());
+                solutionResponse.setSolutionFeatures(solutions.get(i).getSolutionFeatures());
+                solutionResponse.setSolutionBenefits(solutions.get(i).getSolutionBenefits());
+
+                solutionResponses.add(solutionResponse);
+
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(solutionResponses);
         } catch (Exception e) {
             // TODO: handle exception
             e.printStackTrace();
