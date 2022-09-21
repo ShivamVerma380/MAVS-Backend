@@ -2,6 +2,7 @@ package com.mavs.backend.controllers.solution;
 
 import java.util.List;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +44,18 @@ public class SolutionController {
     public ResponseEntity<?> addSolutionFeatures(@RequestHeader("Authorization") String authorization,@PathVariable("title") String title,@RequestParam("name") String name,@RequestParam("description") String description,@RequestParam("icon") String icon){
         try {
             return solutionService.addSolutionFeatures(name,description,icon,title,authorization);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    @PostMapping("/solutionbenefits/{title}")
+    public ResponseEntity<?> addSolutionBenefits(@RequestHeader("Authorization") String authorization,@PathVariable("title") String title,@RequestParam("name") String name,@RequestParam("description") String description,@RequestParam("icon") String icon){
+        try {
+            return solutionService.addSolutionBenefits(name, description, icon, title, authorization);
         } catch (Exception e) {
             // TODO: handle exception
             e.printStackTrace();
