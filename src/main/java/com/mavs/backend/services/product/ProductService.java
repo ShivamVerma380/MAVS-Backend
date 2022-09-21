@@ -142,7 +142,7 @@ public class ProductService {
             String email = jwtUtil.extractUsername(token);
             admin = adminDao.findAdminByEmail(email);
             if(admin==null){
-                responseMessage.setMessage("Only admin can add description");
+                responseMessage.setMessage("Only admin can add additional features");
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
             }
             Product product = productDao.findProductBymodelNumber(modelNumber);
