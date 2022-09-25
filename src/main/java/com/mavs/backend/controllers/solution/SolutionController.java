@@ -76,4 +76,16 @@ public class SolutionController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
     }
+
+    @PostMapping("/solcategory")
+    public ResponseEntity<?> addSolutionCategory(@RequestHeader("Authorization") String authorization,@RequestParam("category") String category,@RequestParam("catimg") String catimg,@RequestParam("catdescription") String catdescription){
+        try {
+            return solutionService.addSolutionCategory(category, catimg, catdescription, authorization);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
 }

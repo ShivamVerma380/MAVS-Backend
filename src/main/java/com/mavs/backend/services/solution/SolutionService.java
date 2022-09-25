@@ -13,11 +13,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.mavs.backend.daos.admin.AdminDao;
 import com.mavs.backend.daos.product.ProductDao;
+import com.mavs.backend.daos.solution.SolutionCategoryDao;
 import com.mavs.backend.daos.solution.SolutionDao;
 import com.mavs.backend.entities.admin.Admin;
 import com.mavs.backend.entities.product.Product;
 import com.mavs.backend.entities.solution.Solution;
 import com.mavs.backend.entities.solution.SolutionBenefits;
+import com.mavs.backend.entities.solution.SolutionCategory;
 import com.mavs.backend.entities.solution.SolutionFeatures;
 import com.mavs.backend.helper.JwtUtil;
 import com.mavs.backend.helper.ResponseMessage;
@@ -42,6 +44,9 @@ public class SolutionService {
 
     @Autowired
     public ProductDao productDao;
+
+    @Autowired
+    public SolutionCategoryDao solutionCategoryDao;
     
     public ResponseEntity<?> addSolution(String title,String description,String coverimg,String solimg1,String solimg2,String solimg3,List<String> productsused,String authorization){
         try {
@@ -129,13 +134,13 @@ public class SolutionService {
             String email = jwtUtil.extractUsername(token);
             admin = adminDao.findAdminByEmail(email);
             if(admin==null){
-                responseMessage.setMessage("Only admins can add solution features");
+                responseMessage.setMessage("Only admins can add solution benefits");
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
             }
 
             Solution solution = solutionDao.findSolutionByTitle(title);
             if(solution==null){
-                responseMessage.setMessage("Solution Not found for which you are adding features");
+                responseMessage.setMessage("Solution Not found for which you are adding benefits");
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
             }
             ArrayList<SolutionBenefits> list = solution.getSolutionBenefits();
@@ -177,6 +182,32 @@ public class SolutionService {
 
             }
             return ResponseEntity.status(HttpStatus.OK).body(solutionResponses);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    public ResponseEntity<?> addSolutionCategory(String category,String catimg,String catdescription,String authorization){
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            admin = adminDao.findAdminByEmail(email);
+            if(admin==null){
+                responseMessage.setMessage("Only admins can add solution features");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+            }
+            SolutionCategory solution = new SolutionCategory();
+            solution.setCategory(category);
+            solution.setCatimg(catimg);
+            solution.setCatdescription(catdescription);
+            solutionCategoryDao.save(solution);
+
+            responseMessage.setMessage("category added successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+            
         } catch (Exception e) {
             // TODO: handle exception
             e.printStackTrace();
