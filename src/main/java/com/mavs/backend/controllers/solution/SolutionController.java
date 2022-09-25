@@ -88,4 +88,16 @@ public class SolutionController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
     }
+
+    @GetMapping("/getsolcategory")
+    public ResponseEntity<?> getSolutionCategories(){
+        try {
+            return solutionService.getSolutionCategories();
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
 }

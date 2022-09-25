@@ -23,6 +23,7 @@ import com.mavs.backend.entities.solution.SolutionCategory;
 import com.mavs.backend.entities.solution.SolutionFeatures;
 import com.mavs.backend.helper.JwtUtil;
 import com.mavs.backend.helper.ResponseMessage;
+import com.mavs.backend.helper.SolCategoryResponse;
 
 @Component
 public class SolutionService {
@@ -47,7 +48,8 @@ public class SolutionService {
 
     @Autowired
     public SolutionCategoryDao solutionCategoryDao;
-    
+
+    // first upload solutions then categories
     public ResponseEntity<?> addSolution(String title,String description,String coverimg,String solcategory,String solimg1,String solimg2,String solimg3,List<String> productsused,String authorization){
         try {
             String token = authorization.substring(7);
@@ -227,6 +229,31 @@ public class SolutionService {
             responseMessage.setMessage("category added successfully");
             return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
             
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    public ResponseEntity<?> getSolutionCategories(){
+        try {
+            List<SolutionCategory> solutionCategory = solutionCategoryDao.findAll();
+            List<SolCategoryResponse> solCategoryResponses = new ArrayList<>();
+            for(int i=0;i<solutionCategory.size();i++){
+                SolCategoryResponse solCategoryResponse = new SolCategoryResponse();
+                solCategoryResponse.setCategory(solutionCategory.get(i).getCategory());
+                List<String> titles = new ArrayList<>();
+                for(int j=0;j<solutionCategory.get(i).getSolutions().size();j++){
+                titles.add(solutionCategory.get(i).getSolutions().get(j).getTitle());
+                }
+                solCategoryResponse.setSolutionName(titles);
+
+                solCategoryResponses.add(solCategoryResponse);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(solCategoryResponses);
         } catch (Exception e) {
             // TODO: handle exception
             e.printStackTrace();
