@@ -29,9 +29,9 @@ public class SolutionController {
 
     
     @PostMapping("/add-solution")
-    public ResponseEntity<?> addSolution(@RequestHeader("Authorization") String authorization,@RequestParam("title") String title,@RequestParam("description") String description,@RequestParam("coverimg") String coverimg,@RequestParam("solimg1") String solimg1,@RequestParam("solimg2") String solimg2,@RequestParam("solimg3") String solimg3,@RequestParam("productsused") List<String> productsused){
+    public ResponseEntity<?> addSolution(@RequestHeader("Authorization") String authorization,@RequestParam("title") String title,@RequestParam("description") String description,@RequestParam("coverimg") String coverimg,@RequestParam("solcategory") String solcategory,@RequestParam("solimg1") String solimg1,@RequestParam("solimg2") String solimg2,@RequestParam("solimg3") String solimg3,@RequestParam("productsused") List<String> productsused){
         try {
-            return solutionService.addSolution(title, description, coverimg, solimg1, solimg2, solimg3, productsused, authorization);
+            return solutionService.addSolution(title, description, coverimg,solcategory, solimg1, solimg2, solimg3, productsused, authorization);
         } catch (Exception e) {
             // TODO: handle exception
             e.printStackTrace();

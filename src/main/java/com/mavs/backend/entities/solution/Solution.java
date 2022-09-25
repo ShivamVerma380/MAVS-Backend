@@ -18,6 +18,8 @@ public class Solution {
 
     private String coverimg;
 
+    private String solcategory;
+
     private ArrayList<SolutionFeatures> solutionFeatures;
 
     private ArrayList<SolutionBenefits> solutionBenefits;
@@ -33,7 +35,7 @@ public class Solution {
     public Solution() {
     }
 
-    public Solution(String title, String description, String coverimg, ArrayList<SolutionFeatures> solutionFeatures,
+    public Solution(String title, String description, String coverimg,String solcategory, ArrayList<SolutionFeatures> solutionFeatures,
             ArrayList<SolutionBenefits> solutionBenefits, String solimg1, String solimg2, String solimg3,
             List<String> productused) {
         this.title = title;
@@ -45,6 +47,7 @@ public class Solution {
         this.solimg2 = solimg2;
         this.solimg3 = solimg3;
         this.productused = productused;
+        this.solcategory = solcategory;
     }
 
     public String getTitle() {
@@ -111,15 +114,6 @@ public class Solution {
         this.solimg3 = solimg3;
     }
 
-   
-
-    @Override
-    public String toString() {
-        return "Solution [coverimg=" + coverimg + ", description=" + description + ", productused=" + productused
-                + ", solimg1=" + solimg1 + ", solimg2=" + solimg2 + ", solimg3=" + solimg3 + ", solutionBenefits="
-                + solutionBenefits + ", solutionFeatures=" + solutionFeatures + ", title=" + title + "]";
-    }
-
     public List<String> getProductused() {
         return productused;
     }
@@ -127,4 +121,23 @@ public class Solution {
     public void setProductused(List<String> productused) {
         this.productused = productused;
     }
+
+    public String getSolcategory() {
+        return solcategory;
+    }
+
+    public void setSolcategory(String solcategory) {
+        this.solcategory = solcategory;
+    }
+
+    @Override
+    public String toString() {
+        return "Solution [coverimg=" + coverimg + ", description=" + description + ", productused=" + productused
+                + ", solcategory=" + solcategory + ", solimg1=" + solimg1 + ", solimg2=" + solimg2 + ", solimg3="
+                + solimg3 + ", solutionBenefits=" + solutionBenefits + ", solutionFeatures=" + solutionFeatures
+                + ", title=" + title + "]";
+    }
+
+    
+    
 }

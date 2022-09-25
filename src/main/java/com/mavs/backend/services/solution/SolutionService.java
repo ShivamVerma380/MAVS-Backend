@@ -48,7 +48,7 @@ public class SolutionService {
     @Autowired
     public SolutionCategoryDao solutionCategoryDao;
     
-    public ResponseEntity<?> addSolution(String title,String description,String coverimg,String solimg1,String solimg2,String solimg3,List<String> productsused,String authorization){
+    public ResponseEntity<?> addSolution(String title,String description,String coverimg,String solcategory,String solimg1,String solimg2,String solimg3,List<String> productsused,String authorization){
         try {
             String token = authorization.substring(7);
             String email = jwtUtil.extractUsername(token);
@@ -62,6 +62,7 @@ public class SolutionService {
             solution.setTitle(title);
             solution.setDescription(description);
             solution.setCoverimg(coverimg);
+            solution.setSolcategory(solcategory);
             solution.setSolimg1(solimg1);
             solution.setSolimg2(solimg2);
             solution.setSolimg3(solimg3);
@@ -203,6 +204,24 @@ public class SolutionService {
             solution.setCategory(category);
             solution.setCatimg(catimg);
             solution.setCatdescription(catdescription);
+            solutionCategoryDao.save(solution);
+
+            List<Solution> sol = solutionDao.findAll();
+            List<Solution> new_sol = new ArrayList<>();
+            System.out.println("outside");
+            for(int i=0;i<sol.size();i++){
+                System.out.println(sol.get(i).getSolcategory());
+                System.out.println(category);
+                if(sol.get(i).getSolcategory().equals(category)){
+                    System.out.println("inside"+i);
+                    new_sol.add(sol.get(i));
+                }
+            }
+            solution.setSolutions(new_sol);
+
+            // List<Solution> sol = solutionDao.findSolutionByCategory(category);
+            // solution.setSolutions(sol);
+
             solutionCategoryDao.save(solution);
 
             responseMessage.setMessage("category added successfully");
