@@ -100,4 +100,16 @@ public class SolutionController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
     }
+
+    @GetMapping("/getsolcategorydetail")
+    public ResponseEntity<?> getSolutionCategoriesDetail(){
+        try {
+            return solutionService.getSolutionCategoryDetails();
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
 }

@@ -261,4 +261,17 @@ public class SolutionService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
     }
+
+    public ResponseEntity<?> getSolutionCategoryDetails(){
+        try {
+            List<SolutionCategory> solutionCategories = solutionCategoryDao.findAll();
+            return ResponseEntity.status(HttpStatus.OK).body(solutionCategories);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+            
+        }
+    }
 }
