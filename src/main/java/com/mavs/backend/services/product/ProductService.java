@@ -22,6 +22,8 @@ import com.mavs.backend.entities.product.Product;
 import com.mavs.backend.entities.product.ProductCategory;
 import com.mavs.backend.entities.product.ProductDescription;
 import com.mavs.backend.helper.JwtUtil;
+import com.mavs.backend.helper.ProductCategoryModelsResponse;
+import com.mavs.backend.helper.ProductCategoryResponse;
 import com.mavs.backend.helper.ProductsDetailsResponse;
 import com.mavs.backend.helper.ResponseMessage;
 import com.mavs.backend.services.CustomUserDetailsService;
@@ -211,6 +213,40 @@ public class ProductService {
             
             
 
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    public ResponseEntity<?> getProductCategory(){
+        try {
+            List<ProductCategory> productCategory = productCategoryDao.findAll();
+            // List<Product> product = productDao.findAll();
+            List<ProductCategoryResponse> productCategoryResponses = new ArrayList<>();
+            for(int i=0;i<productCategory.size();i++){
+                ProductCategoryResponse productCategoryResponse = new ProductCategoryResponse();
+                productCategoryResponse.setTitle(productCategory.get(i).getProductcategory());
+                List<ProductCategoryModelsResponse> models = new ArrayList<>();
+                for(int j=0;j<productCategory.get(i).getModelNum().size();j++){
+                    Product product = productDao.findProductBymodelNumber(productCategory.get(i).getModelNum().get(j));
+                    
+                    ProductCategoryModelsResponse model = new ProductCategoryModelsResponse();
+                    model.setModelNum(product.getModelNumber());
+                    model.setProductname(product.getProductName());
+                    model.setProductimg(product.getProductImage1());
+                    models.add(model);
+                    
+                }
+                productCategoryResponse.setProducts(models);
+
+                productCategoryResponses.add(productCategoryResponse);
+                    
+            }
+
+            return ResponseEntity.status(HttpStatus.OK).body(productCategoryResponses);
         } catch (Exception e) {
             // TODO: handle exception
             e.printStackTrace();

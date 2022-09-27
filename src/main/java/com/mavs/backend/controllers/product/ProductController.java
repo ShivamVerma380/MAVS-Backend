@@ -88,4 +88,17 @@ public class ProductController {
 
     }
 
+    @GetMapping("/getproductcategory")
+    public ResponseEntity<?> getProductCategory(){
+        try {
+            return productService.getProductCategory();
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+
+        }
+    }
+
 }
