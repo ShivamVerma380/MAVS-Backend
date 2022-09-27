@@ -2,8 +2,10 @@ package com.mavs.backend.services.product;
 
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,14 +14,17 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.mavs.backend.daos.admin.AdminDao;
+import com.mavs.backend.daos.product.ProductCategoryDao;
 import com.mavs.backend.daos.product.ProductDao;
 import com.mavs.backend.entities.admin.Admin;
 import com.mavs.backend.entities.product.AdditionalFeatures;
 import com.mavs.backend.entities.product.Product;
+import com.mavs.backend.entities.product.ProductCategory;
 import com.mavs.backend.entities.product.ProductDescription;
 import com.mavs.backend.helper.JwtUtil;
 import com.mavs.backend.helper.ProductsDetailsResponse;
 import com.mavs.backend.helper.ResponseMessage;
+import com.mavs.backend.services.CustomUserDetailsService;
 
 @Repository
 @Component
@@ -39,6 +44,9 @@ public class ProductService {
 
     @Autowired
     public Admin admin;
+
+    @Autowired
+    public ProductCategoryDao productCategoryDao;
     
     public ResponseEntity<?> addProductDetail( String modelNumber,String productName, String productHighlights,
             String productPrice, String productImage1, String productImage2, String productImage3,String videoLink,String productCategory,String authorization) {
@@ -50,6 +58,7 @@ public class ProductService {
                 responseMessage.setMessage("Only admins can add product");
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
             }
+            
 
             Product productDetail = new Product();
             productDetail.setModelNumber(modelNumber);
@@ -162,6 +171,46 @@ public class ProductService {
             return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
 
             
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    public ResponseEntity<?> addProductCategory(String authorization,String productcategory,List<String> modelNum){
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            admin = adminDao.findAdminByEmail(email);
+            if(admin==null){
+                responseMessage.setMessage("Only admin can add product category");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+            HashSet<String> models = new HashSet<>();
+            for(int i=0;i<modelNum.size();i++){
+                try {
+                    Product product = productDao.findProductBymodelNumber(modelNum.get(i));
+                    if(product!=null){
+                        models.add(modelNum.get(i));
+                    }
+                } catch (Exception e) {
+                    // TODO: handle exception
+                    e.printStackTrace();
+                }
+                
+            }
+            ProductCategory productCategory = new ProductCategory();
+            productCategory.setProductcategory(productcategory);
+            productCategory.setModelNum(new ArrayList<>(models));
+            productCategoryDao.save(productCategory);
+
+            responseMessage.setMessage("product category added successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+            
+            
+
         } catch (Exception e) {
             // TODO: handle exception
             e.printStackTrace();

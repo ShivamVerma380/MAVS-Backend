@@ -1,5 +1,7 @@
 package com.mavs.backend.controllers.product;
 
+import java.util.List;
+
 import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -71,6 +73,19 @@ public class ProductController {
             responseMessage.setMessage(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
+    }
+
+    @PostMapping("/productcategory")
+    public ResponseEntity<?> addProductCategory(@RequestHeader("Authorization") String authorization,@RequestParam("productcategory") String productcategory,@RequestParam("modelNum") List<String> modelNum){
+        try {
+            return productService.addProductCategory(authorization, productcategory, modelNum);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+
     }
 
 }
