@@ -53,6 +53,18 @@ public class ProductController {
         }
     }
 
+    @GetMapping("getProducts/{model}")
+    public ResponseEntity<?> getProductById(@PathVariable("model") String model){
+        try {
+            return productService.getProductById(model);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
     @PostMapping("/description/{modelNumber}")
     public ResponseEntity<?> addDescription(@RequestHeader("Authorization") String authorization,@PathVariable("modelNumber") String modelNumber,@RequestParam("title") String title, @RequestParam("description") String description,@RequestParam("image") String image){
         try {

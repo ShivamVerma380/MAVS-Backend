@@ -115,6 +115,18 @@ public class ProductService {
         }
     }
 
+    public ResponseEntity<?> getProductById(String model){
+        try {
+            Product product = productDao.findProductBymodelNumber(model);
+            return ResponseEntity.status(HttpStatus.OK).body(product);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
     public ResponseEntity<?> addDescription(String authorization,String modelNumber,String title,String description,String image){
         try {
             String token = authorization.substring(7);
