@@ -193,6 +193,19 @@ public class SolutionService {
         }
     }
 
+    public ResponseEntity<?> getSolutionById(String title){
+        try {
+            Solution solution = solutionDao.findSolutionByTitle(title);
+            return ResponseEntity.status(HttpStatus.OK).body(solution);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+            
+        }
+    }
+
     public ResponseEntity<?> addSolutionCategory(String category,String catimg,String catdescription,String authorization){
         try {
             String token = authorization.substring(7);

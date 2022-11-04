@@ -77,6 +77,18 @@ public class SolutionController {
         }
     }
 
+    @GetMapping("/getSolutions/{title}")
+    public ResponseEntity<?> getSolutionById(@PathVariable("title") String title){
+        try {
+            return solutionService.getSolutionById(title);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
     @PostMapping("/solcategory")
     public ResponseEntity<?> addSolutionCategory(@RequestHeader("Authorization") String authorization,@RequestParam("category") String category,@RequestParam("catimg") String catimg,@RequestParam("catdescription") String catdescription){
         try {
