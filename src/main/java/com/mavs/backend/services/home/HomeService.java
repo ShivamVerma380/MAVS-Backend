@@ -90,4 +90,17 @@ public class HomeService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
     }
+
+    public ResponseEntity<?> getNavbarDetails(){
+        try {
+            List<Home> home  = homedao.findAll();
+            return ResponseEntity.status(HttpStatus.OK).body(home);
+
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
 }
