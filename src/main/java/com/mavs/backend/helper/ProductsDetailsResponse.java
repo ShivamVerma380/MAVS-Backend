@@ -29,6 +29,10 @@ public class ProductsDetailsResponse {
     private ArrayList<ProductDescription> productDescriptions;
 
     private ArrayList<AdditionalFeatures> additionalFeatures;
+
+    private ArrayList<String> imgSrc;
+
+    private String index;
     
 
     public ProductsDetailsResponse() {
@@ -36,9 +40,14 @@ public class ProductsDetailsResponse {
 
 
 
+    
+
+
+
     public ProductsDetailsResponse(String modelNumber, String productName, String productHighlights,
             String productImage1, String productImage2, String productImage3, String videoLink, String productPrice,
-            ArrayList<ProductDescription> productDescriptions,ArrayList<AdditionalFeatures> additionalFeatures) {
+            ArrayList<ProductDescription> productDescriptions, ArrayList<AdditionalFeatures> additionalFeatures,
+            ArrayList<String> imgSrc,String index) {
         this.modelNumber = modelNumber;
         this.productName = productName;
         this.productHighlights = productHighlights;
@@ -49,7 +58,13 @@ public class ProductsDetailsResponse {
         this.productPrice = productPrice;
         this.productDescriptions = productDescriptions;
         this.additionalFeatures = additionalFeatures;
+        this.imgSrc = imgSrc;
+        this.index = index;
     }
+
+
+
+
 
 
 
@@ -165,14 +180,7 @@ public class ProductsDetailsResponse {
 
 
 
-    @Override
-    public String toString() {
-        return "ProductsDetailsResponse [additionalFeatures=" + additionalFeatures + ", modelNumber=" + modelNumber
-                + ", productDescriptions=" + productDescriptions + ", productHighlights=" + productHighlights
-                + ", productImage1=" + productImage1 + ", productImage2=" + productImage2 + ", productImage3="
-                + productImage3 + ", productName=" + productName + ", productPrice=" + productPrice + ", videoLink="
-                + videoLink + "]";
-    }
+    
 
 
 
@@ -184,6 +192,69 @@ public class ProductsDetailsResponse {
 
     public void setAdditionalFeatures(ArrayList<AdditionalFeatures> additionalFeatures) {
         this.additionalFeatures = additionalFeatures;
+    }
+
+
+
+
+
+
+
+    public ArrayList<String> getImgSrc() {
+        return imgSrc;
+    }
+
+
+
+
+
+
+
+    public void setImgSrc(ArrayList<String> imgSrc) {
+        this.imgSrc = imgSrc;
+    }
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+    @Override
+    public String toString() {
+        return "ProductsDetailsResponse [modelNumber=" + modelNumber + ", productName=" + productName
+                + ", productHighlights=" + productHighlights + ", productImage1=" + productImage1 + ", productImage2="
+                + productImage2 + ", productImage3=" + productImage3 + ", videoLink=" + videoLink + ", productPrice="
+                + productPrice + ", productDescriptions=" + productDescriptions + ", additionalFeatures="
+                + additionalFeatures + ", imgSrc=" + imgSrc + ", index=" + index + "]";
+    }
+
+
+
+
+
+
+
+    public String getIndex() {
+        return index;
+    }
+
+
+
+
+
+
+
+    public void setIndex(String index) {
+        this.index = index;
     }
 
     

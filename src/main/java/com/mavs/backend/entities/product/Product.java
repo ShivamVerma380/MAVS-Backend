@@ -34,14 +34,21 @@ public class Product {
 
         private ArrayList<AdditionalFeatures> additionalFeatures;
 
+        private ArrayList<String> imgsrc;
+
+        private String index;
+
         
 
         public Product() {
         }
 
+        
+
         public Product(String modelNumber, String productId, String productName, String productHighlights,
-                String productImage1, String productImage2, String productImage3, String productPrice, String productVideoLink, String productCategory,
-                ArrayList<ProductDescription> productDescriptions,ArrayList<AdditionalFeatures> additionalFeatures) {
+                String productImage1, String productImage2, String productImage3, String productPrice,
+                String productVideoLink, String productCategory, ArrayList<ProductDescription> productDescriptions,
+                ArrayList<AdditionalFeatures> additionalFeatures, ArrayList<String> imgsrc,String index) {
             this.modelNumber = modelNumber;
             this.productId = productId;
             this.productName = productName;
@@ -54,7 +61,11 @@ public class Product {
             this.productCategory = productCategory;
             this.productDescriptions = productDescriptions;
             this.additionalFeatures = additionalFeatures;
+            this.imgsrc = imgsrc;
+            this.index = index;
         }
+
+
 
         public String getModelNumber() {
             return modelNumber;
@@ -154,16 +165,46 @@ public class Product {
             this.productCategory = productCategory;
         }
 
-        @Override
-        public String toString() {
-            return "Product [additionalFeatures=" + additionalFeatures + ", modelNumber=" + modelNumber
-                    + ", productCategory=" + productCategory + ", productDescriptions=" + productDescriptions
-                    + ", productHighlights=" + productHighlights + ", productId=" + productId + ", productImage1="
-                    + productImage1 + ", productImage2=" + productImage2 + ", productImage3=" + productImage3
-                    + ", productName=" + productName + ", productPrice=" + productPrice + ", productVideoLink="
-                    + productVideoLink + "]";
+        
+
+
+
+        public ArrayList<String> getImgsrc() {
+            return imgsrc;
         }
 
 
+
+        public void setImgsrc(ArrayList<String> imgsrc) {
+            this.imgsrc = imgsrc;
+        }
+
+
+
+
+
+        public String getIndex() {
+            return index;
+        }
+
+
+
+        public void setIndex(String index) {
+            this.index = index;
+        }
+
+
+
+        @Override
+        public String toString() {
+            return "Product [modelNumber=" + modelNumber + ", productId=" + productId + ", productName=" + productName
+                    + ", productHighlights=" + productHighlights + ", productImage1=" + productImage1
+                    + ", productImage2=" + productImage2 + ", productImage3=" + productImage3 + ", productPrice="
+                    + productPrice + ", productVideoLink=" + productVideoLink + ", productCategory=" + productCategory
+                    + ", productDescriptions=" + productDescriptions + ", additionalFeatures=" + additionalFeatures
+                    + ", imgsrc=" + imgsrc + ", index=" + index + "]";
+        }
+
+        
         
 }

@@ -1,5 +1,6 @@
 package com.mavs.backend.controllers.product;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.catalina.connector.Response;
@@ -30,9 +31,9 @@ public class ProductController {
     @PostMapping("/add-product")
     @CrossOrigin(origins = "*")
     public ResponseEntity<?> addProduct(@RequestParam("modelNumber") String modelNumber,@RequestParam("productName") String productName,@RequestParam("productHighlights") String productHighlights,@RequestParam("productPrice") String productPrice,@RequestParam("productImage1") String productImage1,
-    @RequestParam("productImage2")String productImage2,@RequestParam("productImage3") String productImage3,@RequestParam("videoLink") String videoLink,@RequestParam("productCategory") String productCategory,@RequestHeader("Authorization") String authorization){
+    @RequestParam("productImage2")String productImage2,@RequestParam("productImage3") String productImage3,@RequestParam("videoLink") String videoLink,@RequestParam("productCategory") String productCategory,@RequestParam("imgSrc") ArrayList<String> imgSrc,@RequestHeader("Authorization") String authorization){
         try{
-            return productService.addProductDetail(modelNumber, productName, productHighlights, productPrice, productImage1, productImage2, productImage3, videoLink, productCategory, authorization);
+            return productService.addProductDetail(modelNumber, productName, productHighlights, productPrice, productImage1, productImage2, productImage3, videoLink, productCategory,imgSrc, authorization);
         }
         catch(Exception e){
             e.printStackTrace();
