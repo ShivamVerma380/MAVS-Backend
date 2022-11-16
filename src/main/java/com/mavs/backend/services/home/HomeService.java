@@ -11,10 +11,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import com.mavs.backend.daos.admin.AdminDao;
+import com.mavs.backend.daos.home.HomeCoverDao;
 import com.mavs.backend.daos.home.HomeDao;
 import com.mavs.backend.daos.solution.SolutionCategoryDao;
 import com.mavs.backend.entities.admin.Admin;
 import com.mavs.backend.entities.home.Home;
+import com.mavs.backend.entities.home.HomeCover;
 import com.mavs.backend.entities.home.SubLink;
 import com.mavs.backend.entities.solution.SolutionCategory;
 import com.mavs.backend.helper.JwtUtil;
@@ -40,6 +42,9 @@ public class HomeService {
 
     @Autowired
     public HomeDao homedao;
+
+    @Autowired
+    public HomeCoverDao homeCoverDao;
 
     public ResponseEntity<?> addNavbarDetails(String authorization, String name, String mainlink, String submenu){
         try {
@@ -101,6 +106,42 @@ public class HomeService {
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    public ResponseEntity<?> addHomeCovers(String authorization,String coverimg,String coverdescription){
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            admin = adminDao.findAdminByEmail(email);
+            if(admin==null){
+                responseMessage.setMessage("Only admins can add details");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+            }
+
+            HomeCover homecover = new HomeCover();
+            homecover.setImg(coverimg);
+            homecover.setDescription(coverdescription);
+            homeCoverDao.save(homecover);
+            responseMessage.setMessage("home cover details saved successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    public ResponseEntity<?> getHomeCovers(){
+        try {
+            List<HomeCover> homeCovers = homeCoverDao.findAll();
+            return ResponseEntity.status(HttpStatus.OK).body(homeCovers);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body((responseMessage));
         }
     }
 }
