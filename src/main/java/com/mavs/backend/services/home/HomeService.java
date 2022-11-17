@@ -12,11 +12,13 @@ import org.springframework.stereotype.Repository;
 
 import com.mavs.backend.daos.admin.AdminDao;
 import com.mavs.backend.daos.home.AchievementsDao;
+import com.mavs.backend.daos.home.CompanyDescriptionDao;
 import com.mavs.backend.daos.home.HomeCoverDao;
 import com.mavs.backend.daos.home.HomeDao;
 import com.mavs.backend.daos.solution.SolutionCategoryDao;
 import com.mavs.backend.entities.admin.Admin;
 import com.mavs.backend.entities.home.Achievements;
+import com.mavs.backend.entities.home.CompanyDescription;
 import com.mavs.backend.entities.home.Home;
 import com.mavs.backend.entities.home.HomeCover;
 import com.mavs.backend.entities.home.SubLink;
@@ -50,6 +52,9 @@ public class HomeService {
 
     @Autowired
     public AchievementsDao achievementsDao;
+
+    @Autowired
+    public CompanyDescriptionDao companyDescriptionDao;
 
     public ResponseEntity<?> addNavbarDetails(String authorization, String name, String mainlink, String submenu){
         try {
@@ -178,6 +183,32 @@ public class HomeService {
         try {
             List<Achievements> achievements = achievementsDao.findAll();
             return ResponseEntity.status(HttpStatus.OK).body(achievements);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body((responseMessage));
+        }
+    }
+
+    public ResponseEntity<?> addCompanyDescription(String authorization,String title,String description){
+        try {
+            String token = authorization.substring(7);
+                String email = jwtUtil.extractUsername(token);
+                admin = adminDao.findAdminByEmail(email);
+                if(admin==null){
+                    responseMessage.setMessage("Only admins can add details");
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+                }
+
+            CompanyDescription companyDescription = new CompanyDescription();
+            companyDescription.setTitle(title);
+            companyDescription.setDescription(description);
+            companyDescriptionDao.save(companyDescription);
+
+            responseMessage.setMessage("description saved successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+
         } catch (Exception e) {
             // TODO: handle exception
             e.printStackTrace();

@@ -96,5 +96,17 @@ public class HomeController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body((responseMessage));
         }
     }
+
+    @PostMapping("/companydescription")
+    public ResponseEntity<?> addCompanyDescription(@RequestHeader("Authorization") String authorization,@RequestParam("title") String title,@RequestParam("description") String description){
+        try {
+            return homeService.addCompanyDescription(authorization, title, description);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body((responseMessage));
+        }
+    }
     
 }
