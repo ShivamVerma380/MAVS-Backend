@@ -114,7 +114,7 @@ public class HomeService {
         }
     }
 
-    public ResponseEntity<?> addHomeCovers(String authorization,String coverimg,String coverdescription){
+    public ResponseEntity<?> addHomeCovers(String authorization,String video,String coverdescription){
         try {
             String token = authorization.substring(7);
             String email = jwtUtil.extractUsername(token);
@@ -125,7 +125,7 @@ public class HomeService {
             }
 
             HomeCover homecover = new HomeCover();
-            homecover.setImg(coverimg);
+            homecover.setVideo(video);
             homecover.setDescription(coverdescription);
             homeCoverDao.save(homecover);
             responseMessage.setMessage("home cover details saved successfully");
@@ -152,6 +152,14 @@ public class HomeService {
 
     public ResponseEntity<?> addAchievements(String authorization, String img){
         try {
+                String token = authorization.substring(7);
+                String email = jwtUtil.extractUsername(token);
+                admin = adminDao.findAdminByEmail(email);
+                if(admin==null){
+                    responseMessage.setMessage("Only admins can add details");
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+                }
+                
             Achievements achievements = new Achievements();
             achievements.setAchievementImg(img);
             achievementsDao.save(achievements);

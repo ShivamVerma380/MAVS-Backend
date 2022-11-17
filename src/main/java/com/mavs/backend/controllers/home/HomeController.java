@@ -50,9 +50,9 @@ public class HomeController {
     }
 
     @PostMapping("/homecover")
-    public ResponseEntity<?> addHomeCovers(@RequestParam("coverimg") String coverimg,@RequestParam("coverdescription") String description,@RequestHeader("Authorization") String authorization){
+    public ResponseEntity<?> addHomeCovers(@RequestParam("video") String video,@RequestParam("coverdescription") String description,@RequestHeader("Authorization") String authorization){
         try {
-            return homeService.addHomeCovers(authorization, coverimg, description);
+            return homeService.addHomeCovers(authorization, video, description);
         } catch (Exception e) {
             // TODO: handle exception
             e.printStackTrace();

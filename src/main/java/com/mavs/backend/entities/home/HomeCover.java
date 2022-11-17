@@ -11,14 +11,14 @@ public class HomeCover {
     @Id
     private String description;
 
-    private String img;
+    private String video;
 
     public HomeCover() {
     }
 
-    public HomeCover(String description, String img) {
+    public HomeCover(String description, String video) {
         this.description = description;
-        this.img = img;
+        this.video = video;
     }
 
     public String getDescription() {
@@ -29,17 +29,17 @@ public class HomeCover {
         this.description = description;
     }
 
-    public String getImg() {
-        return img;
+    public String getVideo() {
+        return video;
     }
 
-    public void setImg(String img) {
-        this.img = img;
+    public void setVideo(String video) {
+        this.video = video;
     }
 
     @Override
     public String toString() {
-        return "HomeCover [description=" + description + ", img=" + img + "]";
+        return "HomeCover [description=" + description + ", video=" + video + "]";
     }
 
     
