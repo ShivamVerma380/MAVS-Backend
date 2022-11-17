@@ -173,4 +173,16 @@ public class HomeService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body((responseMessage));
         }
     }
+
+    public ResponseEntity<?> getAchievements(){
+        try {
+            List<Achievements> achievements = achievementsDao.findAll();
+            return ResponseEntity.status(HttpStatus.OK).body(achievements);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body((responseMessage));
+        }
+    }
 }

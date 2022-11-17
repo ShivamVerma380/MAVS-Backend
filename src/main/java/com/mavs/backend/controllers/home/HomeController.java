@@ -84,4 +84,17 @@ public class HomeController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body((responseMessage));
         }
     }
+
+    @GetMapping("/getAchievements")
+    public ResponseEntity<?> getAchievements(){
+        try {
+            return homeService.getAchievements();
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body((responseMessage));
+        }
+    }
+    
 }
