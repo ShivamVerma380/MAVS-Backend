@@ -72,4 +72,16 @@ public class HomeController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body((responseMessage));
         }
     }
+
+    @PostMapping("/achievements")
+    public ResponseEntity<?> addAchievements(@RequestHeader("Authorization") String authorization,@RequestParam("img") String img){
+        try {
+            return homeService.addAchievements(authorization, img);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body((responseMessage));
+        }
+    }
 }

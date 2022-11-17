@@ -39,7 +39,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/register","/login-admin","/refresh-token","/add-product","/excel/products","/get-products","/getProducts/{model}","/description/{modelNumber}","/additionalfeatures/{modelNumber}","/login-admin","/add-solution","/solutions","/solutionfeatures/{title}","/solutionbenefits/{title}","/solcategory","/getsolcategory","/getsolcategorydetail","/productcategory","/getproductcategory","/getSolutions/{title}","/getProducts/{model}","/navbar","/getNavbar","/homecover","/gethomecover").permitAll() //one doubt of image returning
+                .antMatchers("/register","/achievements","/login-admin","/refresh-token","/add-product","/excel/products","/get-products","/getProducts/{model}","/description/{modelNumber}","/additionalfeatures/{modelNumber}","/login-admin","/add-solution","/solutions","/solutionfeatures/{title}","/solutionbenefits/{title}","/solcategory","/getsolcategory","/getsolcategorydetail","/productcategory","/getproductcategory","/getSolutions/{title}","/getProducts/{model}","/navbar","/getNavbar","/homecover","/gethomecover").permitAll() //one doubt of image returning
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

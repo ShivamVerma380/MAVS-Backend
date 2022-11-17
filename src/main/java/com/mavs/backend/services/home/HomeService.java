@@ -11,10 +11,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import com.mavs.backend.daos.admin.AdminDao;
+import com.mavs.backend.daos.home.AchievementsDao;
 import com.mavs.backend.daos.home.HomeCoverDao;
 import com.mavs.backend.daos.home.HomeDao;
 import com.mavs.backend.daos.solution.SolutionCategoryDao;
 import com.mavs.backend.entities.admin.Admin;
+import com.mavs.backend.entities.home.Achievements;
 import com.mavs.backend.entities.home.Home;
 import com.mavs.backend.entities.home.HomeCover;
 import com.mavs.backend.entities.home.SubLink;
@@ -45,6 +47,9 @@ public class HomeService {
 
     @Autowired
     public HomeCoverDao homeCoverDao;
+
+    @Autowired
+    public AchievementsDao achievementsDao;
 
     public ResponseEntity<?> addNavbarDetails(String authorization, String name, String mainlink, String submenu){
         try {
@@ -137,6 +142,22 @@ public class HomeService {
         try {
             List<HomeCover> homeCovers = homeCoverDao.findAll();
             return ResponseEntity.status(HttpStatus.OK).body(homeCovers);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body((responseMessage));
+        }
+    }
+
+    public ResponseEntity<?> addAchievements(String authorization, String img){
+        try {
+            Achievements achievements = new Achievements();
+            achievements.setAchievementImg(img);
+            achievementsDao.save(achievements);
+
+            responseMessage.setMessage("achievements uploaded successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
         } catch (Exception e) {
             // TODO: handle exception
             e.printStackTrace();
