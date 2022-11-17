@@ -216,4 +216,17 @@ public class HomeService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body((responseMessage));
         }
     }
+
+    public ResponseEntity<?> getCompanyDescription(){
+        try {
+            List<CompanyDescription> companyDescriptions = companyDescriptionDao.findAll();
+            return ResponseEntity.status(HttpStatus.OK).body(companyDescriptions);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body((responseMessage));
+            
+        }
+    }
 }

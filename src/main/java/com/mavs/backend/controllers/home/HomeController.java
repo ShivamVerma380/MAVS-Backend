@@ -108,5 +108,17 @@ public class HomeController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body((responseMessage));
         }
     }
+
+    @GetMapping("/getCompanyDescription")
+    public ResponseEntity<?> getCompanyDescription(){
+        try {
+            return homeService.getCompanyDescription();
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body((responseMessage));
+        }
+    }
     
 }
