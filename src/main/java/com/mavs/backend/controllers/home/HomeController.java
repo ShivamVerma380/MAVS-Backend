@@ -36,6 +36,19 @@ public class HomeController {
         }
     }
 
+    @GetMapping("/")
+    public ResponseEntity<?> getWelcomeMessage(){
+        try {
+            responseMessage.setMessage("Welcome");
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body((responseMessage));
+        }
+    }
+
     @GetMapping("/getNavbar")
     public ResponseEntity<?> getNavbarDetails(){
         try {
