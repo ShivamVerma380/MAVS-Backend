@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.mavs.backend.helper.ExcelHelper;
 import com.mavs.backend.helper.ResponseMessage;
 import com.mavs.backend.services.product.ProductService;
 
@@ -27,6 +29,9 @@ public class ProductController {
 
     @Autowired
     public ResponseMessage responseMessage;
+
+    @Autowired
+    public ExcelHelper excelHelper;
     
     @PostMapping("/add-product")
     @CrossOrigin(origins = "*")
@@ -111,6 +116,17 @@ public class ProductController {
             responseMessage.setMessage(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
 
+        }
+    }
+
+    @PostMapping("/excel/products")
+    public ResponseEntity<?> addExcelProducts(@RequestParam("file") MultipartFile file){
+        try {
+            return excelHelper.addExcelProducts(file.getInputStream());
+        } catch (Exception e) {
+            // e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
     }
 

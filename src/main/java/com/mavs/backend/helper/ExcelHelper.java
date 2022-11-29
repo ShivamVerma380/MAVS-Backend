@@ -1,69 +1,30 @@
 package com.mavs.backend.helper;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.URL;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
-import org.apache.poi.sl.usermodel.PictureData;
-import org.apache.poi.ss.usermodel.DataFormatter;
-
-import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 
-import javax.imageio.ImageIO;
-import javax.xml.crypto.Data;
+import org.apache.poi.sl.usermodel.PictureData;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xslf.model.ParagraphPropertyFetcher.ParaPropFetcher;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.bson.BsonBinary;
-import org.bson.BsonBinarySubType;
-import org.bson.types.Binary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.converter.BufferedImageHttpMessageConverter;
-// import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.awt.image.BufferedImage;
-
-// import com.brewingjava.mahavir.daos.HomepageComponents.DealsDao;
-// import com.brewingjava.mahavir.daos.HomepageComponents.ShopByBrandsDao;
-// import com.brewingjava.mahavir.daos.categories.CategoriesToDisplayDao;
-// import com.brewingjava.mahavir.daos.offers.OfferPosterDao;
-// import com.brewingjava.mahavir.daos.product.FilterCriteriasDao;
-// import com.brewingjava.mahavir.entities.HomepageComponents.BrandCategory;
-// import com.brewingjava.mahavir.entities.HomepageComponents.BrandOfferPoster;
-// import com.brewingjava.mahavir.entities.HomepageComponents.Deals;
-// import com.brewingjava.mahavir.entities.HomepageComponents.ShopByBrands;
-// import com.brewingjava.mahavir.entities.categories.CategoriesToDisplay;
-// import com.brewingjava.mahavir.entities.categories.SubCategories;
-// import com.brewingjava.mahavir.entities.categories.SubSubCategories;
-// import com.brewingjava.mahavir.entities.offers.OfferPosters;
-// import com.brewingjava.mahavir.entities.product.Factors;
-// import com.brewingjava.mahavir.entities.product.FilterCriterias;
-import com.mavs.backend.entities.product.Product;
 import com.mavs.backend.daos.product.ProductDao;
 import com.mavs.backend.entities.product.FreeItem;
-// import com.brewingjava.mahavir.entities.product.ProductDescription;
-// import com.brewingjava.mahavir.entities.product.ProductVariants;
+import com.mavs.backend.entities.product.Product;
 
-import lombok.val;
-import lombok.var;
+import java.awt.image.BufferedImage;
 
 @Component
-public class ExcelHelper {
+public class ExcelHelper{
 
     @Autowired
     public ResponseMessage responseMessage;
@@ -78,10 +39,9 @@ public class ExcelHelper {
         return false;
     }
 
-    
-    public ResponseEntity<?> addProducts(InputStream inputStream) {
+    public ResponseEntity<?> addExcelProducts(InputStream inputStream){
         try {
-
+            String message="";
             DataFormatter formatter = new DataFormatter();
             PictureData pict;
             byte[] data;
@@ -106,11 +66,10 @@ public class ExcelHelper {
                 }
                 Iterator<Cell> cells = row.iterator();
                 int cid=0;
-                Product productDetail = new Product();
-                
+                Product product = new Product();
                 String destinationFile = "sample.jpg";
                 boolean flag = true;
-                
+
                 while(cells.hasNext()){
                     Cell cell = cells.next();
                     switch(cid){
@@ -118,27 +77,26 @@ public class ExcelHelper {
                             try {
                                 value = formatter.formatCellValue(cell);
                                 if(value.trim().equals("-")){
-                                    productDetail=null;
+                                    product=null;
                                     break;
                                 }
-                                productDetail.setProductId(value);
-                                
+                                product.setModelNumber(value);
                             } catch (Exception e) {
-                                System.out.println("Product Id:"+formatter.formatCellValue(cell));
+                                System.out.println("Model Number:"+formatter.formatCellValue(cell));
                                 // e.printStackTrace();
                                 flag = false;
-                                //TODO: handle exception
                             }
+                        break;
                         case 1:
                             try {
                                 value = formatter.formatCellValue(cell);
-                                if(value.trim().equals("-")){
-                                    productDetail=null;
+                                if(product==null || value.trim().equals("-")){
+                                    product.setProductName("");
                                     break;
-                                }
-                                productDetail.setModelNumber(value);
+                                } 
+                                product.setProductName(value);
                             } catch (Exception e) {
-                                System.out.println("Model Number:"+formatter.formatCellValue(cell));
+                                System.out.println("Product Name:"+product.getModelNumber());
                                 // e.printStackTrace();
                                 flag = false;
                             }
@@ -146,350 +104,143 @@ public class ExcelHelper {
                         case 2:
                             try {
                                 value = formatter.formatCellValue(cell);
-                                if(productDetail==null || value.trim().equals("-")){
-                                    productDetail.setProductName("");
+                                if(product==null || value.trim().equals("-")) {
+                                    product.setProductHighlights("");
                                     break;
-                                } 
-                                productDetail.setProductName(value);
+                                }product.setProductHighlights(value);
                             } catch (Exception e) {
-                                System.out.println("Product Name:"+productDetail.getModelNumber());
+                                System.out.println("Product Highlights:"+product.getModelNumber());
+                                flag=false;
                                 // e.printStackTrace();
-                                flag = false;
+                                // responseMessage.setMessage(e.getMessage());
+                                // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
                             }
                         break;
                         case 3:
                             try {
                                 value = formatter.formatCellValue(cell);
-                                if(productDetail==null || value.trim().equals("-")) break;
-                                productDetail.setProductImage1(value);
+                                if(product==null || value.trim().equals("-")) break;
+                                product.setProductImage1(value);
                                 // imageUrl = new URL(value);
                                 // image = ImageIO.read(imageUrl);
                                 // byteArrayOutputStream = new ByteArrayOutputStream();
                                 // ImageIO.write(image,"jpeg",byteArrayOutputStream);
                                 // fileName = "sample.jpeg";
                                 // multipartFile = new MockMultipartFile(fileName,fileName,"jpeg",byteArrayOutputStream.toByteArray());
-                                // productDetail.setProductImage1(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
+                                // product.setProductImage1(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
                             } catch (Exception e) {
-                                System.out.println("Product Image 1:"+productDetail.getModelNumber());
+                                System.out.println("Product Image 1:"+product.getModelNumber());
                                 // e.printStackTrace();
                                 flag = false;
                             }
                         break;
                         case 4:
-                            try {
-                                value = formatter.formatCellValue(cell);
-                                if(productDetail==null || value.trim().equals("-")) break;
-                                productDetail.setProductImage2(value);
-                                // imageUrl = new URL(value);
-                                // image = ImageIO.read(imageUrl);
-                                // byteArrayOutputStream = new ByteArrayOutputStream();
-                                // ImageIO.write(image,"jpeg",byteArrayOutputStream);
-                                // fileName = "sample.jpeg";
-                                // multipartFile = new MockMultipartFile(fileName,fileName,"jpeg",byteArrayOutputStream.toByteArray());
-                                // productDetail.setProductImage2(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
-                            } catch (Exception e) {
-                                System.out.println("Product Image 2:"+productDetail.getModelNumber());
-                                // e.printStackTrace();
-                                flag = false;
-                            }
+                        try {
+                            value = formatter.formatCellValue(cell);
+                            if(product==null || value.trim().equals("-")) break;
+                            product.setProductImage2(value);
+                            // imageUrl = new URL(value);
+                            // image = ImageIO.read(imageUrl);
+                            // byteArrayOutputStream = new ByteArrayOutputStream();
+                            // ImageIO.write(image,"jpeg",byteArrayOutputStream);
+                            // fileName = "sample.jpeg";
+                            // multipartFile = new MockMultipartFile(fileName,fileName,"jpeg",byteArrayOutputStream.toByteArray());
+                            // productDetail.setProductImage1(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
+                        } catch (Exception e) {
+                            System.out.println("Product Image 2:"+product.getModelNumber());
+                            // e.printStackTrace();
+                            flag = false;
+                        }
                         break;
                         case 5:
-                            try {
-                                value = formatter.formatCellValue(cell);
-                                if(productDetail==null || value.trim().equals("-")) break;
-                                productDetail.setProductImage3(value);
-                                // imageUrl = new URL(value);
-                                // image = ImageIO.read(imageUrl);
-                                // byteArrayOutputStream = new ByteArrayOutputStream();
-                                // ImageIO.write(image,"jpeg",byteArrayOutputStream);
-                                // fileName = "sample.jpeg";
-                                // multipartFile = new MockMultipartFile(fileName,fileName,"jpeg",byteArrayOutputStream.toByteArray());
-                                // productDetail.setProductImage3(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
-                            } catch (Exception e) {
-                                System.out.println("Product Image 3:"+productDetail.getModelNumber());
-                                // e.printStackTrace();
-                                flag = false;
-                            }
+                        try {
+                            value = formatter.formatCellValue(cell);
+                            if(product==null || value.trim().equals("-")) break;
+                            product.setProductImage3(value);
+                            // imageUrl = new URL(value);
+                            // image = ImageIO.read(imageUrl);
+                            // byteArrayOutputStream = new ByteArrayOutputStream();
+                            // ImageIO.write(image,"jpeg",byteArrayOutputStream);
+                            // fileName = "sample.jpeg";
+                            // multipartFile = new MockMultipartFile(fileName,fileName,"jpeg",byteArrayOutputStream.toByteArray());
+                            // productDetail.setProductImage1(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
+                        } catch (Exception e) {
+                            System.out.println("Product Image 3:"+product.getModelNumber());
+                            // e.printStackTrace();
+                            flag = false;
+                        }
                         break;
                         case 6:
                             try {
                                 value = formatter.formatCellValue(cell);
-                                if(productDetail==null || value.trim().equals("-")) break;
-                                productDetail.setProductVideoLink(value);
-                                // imageUrl = new URL(value);
-                                // image = ImageIO.read(imageUrl);
-                                // byteArrayOutputStream = new ByteArrayOutputStream();
-                                // ImageIO.write(image,"jpeg",byteArrayOutputStream);
-                                // fileName = "sample.jpeg";
-                                // multipartFile = new MockMultipartFile(fileName,fileName,"jpeg",byteArrayOutputStream.toByteArray());
-                                // productDetail.setProductImage4(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
+                                if(product==null || value.trim().equals("-")) break;
+                                product.setProductVideoLink(value);
                             } catch (Exception e) {
-                                System.out.println("Product Image 4:"+productDetail.getModelNumber());
+                                // TODO: handle exception
+                                System.out.println("Product Video Link:"+product.getModelNumber());
                                 // e.printStackTrace();
                                 flag = false;
                             }
                         break;
-                        
                         case 7:
                             try {
                                 value = formatter.formatCellValue(cell);
-                                if(productDetail==null || value.trim().equals("-")) break;
-                                productDetail.setProductPrice(value);
+                                if(product==null || value.trim().equals("-")) break;
+                                product.setProductPrice(value);
                             } catch (Exception e) {
-                                System.out.println("Product Price:"+productDetail.getModelNumber());
+                                // TODO: handle exception
+                                System.out.println("Product Price:"+product.getModelNumber());
                                 // e.printStackTrace();
                                 flag = false;
                             }
                         break;
-                        
+                        case 8:
+                            try {
+                                value = formatter.formatCellValue(cell);
+                                if(product==null || value.trim().equals("-")) break;
+                                product.setProductCategory(value);
+                            } catch (Exception e) {
+                                // TODO: handle exception
+                                System.out.println("Product Category:"+product.getModelNumber());
+                                // e.printStackTrace();
+                                flag = false;
+                            }
+                        break;
                         case 9:
                             try {
                                 value = formatter.formatCellValue(cell);
-                                if(productDetail==null || value.trim().equals("-")) break;
-                                productDetail.setProductCategory(value);
+                                if(product==null || value.trim().equals("-")) break;
+                                product.setIndex(value);
                             } catch (Exception e) {
-                                System.out.println("Categories:"+productDetail.getModelNumber());
+                                // TODO: handle exception
+                                System.out.println("Index:"+product.getModelNumber());
                                 // e.printStackTrace();
                                 flag = false;
                             }
                         break;
-        //                 case 11:
-        //                     try {
-        //                         value = formatter.formatCellValue(cell);
-        //                         if(productDetail==null || value.trim().equals("-")) {
-        //                             productDetail.setProductHighlights("");
-        //                             break;
-        //                         }productDetail.setProductHighlights(value);
-        //                     } catch (Exception e) {
-        //                         System.out.println("Product Highlights:"+productDetail.getModelNumber());
-        //                         flag=false;
-                                
-        //                     }
-        //                 break;
-        //                 case 12:
-        //                     try {
-        //                         value = formatter.formatCellValue(cell);
-        //                         if(value.trim().equals("")){
-        //                             productDetail.setSubCategoryMap(new HashMap<>());
-        //                             break;
-        //                         } 
-        //                         HashMap<String,String> map = new HashMap<>();
-        //                         String arr[]= value.split(",");
-        //                         for(int i=0;i<arr.length;i++){
-        //                             String subCat[] = arr[i].split(":");
-        //                             map.put(subCat[0],subCat[1]);
-        //                         }
-        //                         productDetail.setSubCategoryMap(map);
-        //                     } catch (Exception e) {
-        //                         flag = false;
-        //                         System.out.println("Sub Categories:"+productDetail.getModelNumber());
-        //                         // System.out.println(formatter.formatCellValue(cell));
-        //                         // e.printStackTrace();
-        //                     }
-                            
-        //                 break;
-        //                 case 13:
-        //                     try {
-        //                         HashMap<String,HashMap<String,String>> productInfo = new HashMap<>();
-        //                         value = formatter.formatCellValue(cell);
-        //                         if(value.trim().equals("-")){
-        //                             productDetail.setProductInformation(new HashMap<>());
-        //                             break;
-        //                         }
-        //                         String array[] = value.split("#");
-        //                         for(int i=0;i<array.length;i++){
-        //                             //System.out.println(array[i]);
-        //                             String subSplit[] = array[i].split("\\[");
-        //                             HashMap<String,String> mp = new HashMap<>();
-        //                         // System.out.println(subSplit.length);
-        //                             String x = subSplit[1];
-        //                             String innermap = x.substring(0,x.length()-1);
-        //                             //System.out.println("0:"+subSplit[0]+"\t1:"+innermap);
-        //                             String keyValue[] = innermap.split(";");
-        //                             for(int j=0;j<keyValue.length;j++){
-        //                                 //System.out.println("KeyValue:"+keyValue[j]);
-        //                                 String pair[] = keyValue[j].split("=");
-        //                                 try {
-        //                                     //System.out.println("pair[0]="+pair[0]+"\tpair[1]="+pair[1]);
-        //                                     mp.put(pair[0],pair[1]);
-        //                                 } catch (Exception e) {
-        //                                     // e.printStackTrace();
-        //                                     flag = false;
-        //                                     System.out.println("Product Information:"+productDetail.getModelNumber());
-        //                                 }
-        //                             }
-        //                             productInfo.put(subSplit[0],mp);
-        //                         }
-        //                         productDetail.setProductInformation(productInfo);
-        //                     } catch (Exception e) {
-        //                         flag = false;
-        //                         System.out.println("Product Information:"+productDetail.getModelNumber());
-        //                         // System.out.println(formatter.formatCellValue(cell));
-        //                         // e.printStackTrace();
-        //                     }
-        //                 break;
-        //                 case 14:
-        //                     try {
-        //                         HashMap<String,String> productVariants = new HashMap<>();
-        //                         value = formatter.formatCellValue(cell);
-        //                         if(productDetail==null) break;
-        //                         if(value.trim().equals("-")){
-        //                             productDetail.setVariants(new HashMap<>());
-        //                             break;
-        //                         }
-        //                         String array[] = value.split(";");
-        //                         for(int i=0;i<array.length;i++){
-        //                             // array[i] = array[i].trim();
-        //                             String pair[] = array[i].split("=");
-        //                             // System.out.println("pair[0]="+pair[0]+"\tpair[1]="+pair[1]);
-        //                             productVariants.put(pair[0],pair[1]);
-        //                         }
-        //                         System.out.println(productDetail.getModelNumber()+"\t"+productVariants);
-        //                         // productDetail.setVariants(productVariants);
-        //                         productDetail.setVariants(productVariants);
-        //                     } catch (Exception e) {
-        //                         flag = false;
-        //                         System.out.println("Product Variants:"+productDetail.getModelNumber());
-        //                         // System.out.println(formatter.formatCellValue(cell));
-        //                         // e.printStackTrace();
-        //                     }
-        //                 break;
-        //                 case 15:
-        //                     try {
-        //                         value = formatter.formatCellValue(cell);
-        //                         if(productDetail==null || value.trim().equals("-")) break;
-        //                         String array[] = value.split(";");
-        //                         ArrayList<String> defaultVariants = new ArrayList<>();
-        //                         for(int i=0;i<array.length;i++){
-        //                             defaultVariants.add(array[i].trim());
-        //                         }
-        //                         productDetail.setDefaultVariant(defaultVariants);
-        //                     } catch (Exception e) {
-        //                         flag = false;
-        //                         System.out.println("Default variants:"+productDetail.getModelNumber());
-        //                     }
-        //                 break;
-        //                 case 16:
-        //                     try {
-        //                         value = formatter.formatCellValue(cell);
-        //                         if(productDetail==null) break;
-        //                         if(value.trim().equals("-")){
-        //                             productDetail.setVariantTypes(new HashMap<>());
-        //                             break;
-        //                         }
-        //                         HashMap<String,ArrayList<String>> variantTypes = new HashMap<>();
-        //                         String array[] = value.split("#");
-        //                         for(int i=0;i<array.length;i++){
-        //                             String pair[] = array[i].split("\\[");
-        //                             pair[1] = pair[1].substring(0,pair[1].length()-1);
-        //                             String values[] = pair[1].split(";");
-        //                             ArrayList<String> list = new ArrayList<>();
-        //                             for(int j=0;j<values.length;j++){
-        //                                 list.add(values[j]);
-        //                             }
-        //                             System.out.println("pair[0]="+pair[0]+"\tpair[1]="+pair[1]);
-        //                             variantTypes.put(pair[0],list);
-        //                         }
-        //                         productDetail.setVariantTypes(variantTypes);
-
-        //                     } catch (Exception e) {
-        //                         flag = false;
-        //                         System.out.println("Product Variant Types:"+productDetail.getModelNumber());
-        //                     }
-        //                 break;
-        //                 case 17:
-        //                     try {
-        //                         value = formatter.formatCellValue(cell);
-        //                         if(value.trim().equals("-")){    
-        //                             // System.out.println("In if free item"); 
-        //                             freeItem = null; 
-        //                             break;
-        //                         }
-        //                         freeItem = new FreeItem();
-        //                         String arrays[] = value.split(";");
-        //                         freeItem.setName(arrays[0]);
-        //                         freeItem.setPrice(arrays[1]);
-        //                         imageUrl = new URL(arrays[2]);
-        //                         image = ImageIO.read(imageUrl);
-        //                         byteArrayOutputStream = new ByteArrayOutputStream();
-        //                         ImageIO.write(image,"jpg",byteArrayOutputStream);
-        //                         fileName = "sample.jpg";
-    
-        //                         multipartFile = new MockMultipartFile(fileName,fileName,"jpg",byteArrayOutputStream.toByteArray());
-        //                         freeItem.setImage(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
-        //                         System.out.println(freeItem.toString());                    
-        //                     } catch (Exception e) {
-        //                         flag = false;
-        //                         System.out.println("Free Item:"+productDetail.getModelNumber());
-        //                         // System.out.println(formatter.formatCellValue(cell));
-        //                         // e.printStackTrace();
-        //                     }
-        //                 break;
-        //                 case 18:
-        //                     try {
-        //                         value = formatter.formatCellValue(cell);
-        //                         if(productDetail==null) break;
-        //                         if(value.trim().equals("")){
-        //                             productDetail.setFiltercriterias(new HashMap<>());
-        //                             break;
-        //                         }
-        //                         HashMap<String,String> filterCriterias = new HashMap<>();
-        //                         String keyValue[] = value.split(";");
-        //                         for(int i=0;i<keyValue.length;i++){
-        //                             String pair[] = keyValue[i].split("=");
-        //                             filterCriterias.put(pair[0].trim(),pair[1].trim());
-        //                         }
-        //                         productDetail.setFiltercriterias(filterCriterias);
-                                
-        //                     } catch (Exception e) {
-        //                         flag = false;
-        //                         System.out.println("Filter Criterias:"+productDetail.getModelNumber());
-        //                         // System.out.println(formatter.formatCellValue(cell));
-        //                         // e.printStackTrace();
-        //                     }   
-        //                 break;
-        //                 case 19:
-        //                     try {
-        //                         value = formatter.formatCellValue(cell);
-        //                         if(productDetail==null) break;
-        //                         if(value.trim().equals("-")){
-        //                             break;
-        //                         }
-        //                         String[] productDesc = value.split("#");
-        //                         ArrayList<ProductDescription> list  = new ArrayList<>(); 
-        //                         for(int i=0;i<productDesc.length;i++){
-        //                             String product[] = productDesc[i].split(";");
-        //                             ProductDescription productDescription = new ProductDescription(product[0],product[1],product[2]);
-        //                             list.add(productDescription);
-        //                         }
-        //                         productDetail.setProductDescriptions(list);
-
-        //                     } catch (Exception e) {
-        //                         // e.printStackTrace();
-        //                         System.out.println("Product Description:"+productDetail.getModelNumber());
-        //                         // responseMessage.setMessage(e.getMessage());
-        //                         // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
-        //                     }
-
                         default:
                         break;
                     }
                     cid++;
                 }
+
                 try {
-                    if(flag || productDetail!=null || !productDetail.getModelNumber().equals(""))
-                        productDao.save(productDetail);
-                    else
-                        System.out.println("Product Details not saved"+productDetail.getModelNumber());
+                    if(flag || product!=null || !product.getModelNumber().equals(""))
+                        productDao.save(product);
+                    else{
+                        System.out.println("Product Details not saved"+product.getModelNumber());
+                        message+=product.getModelNumber()+",";
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 
                 rowNumber++;
             }
-            responseMessage.setMessage("Products saved successfully");
+            responseMessage.setMessage("Products saved successfully\nNot Saved for:"+message);
             return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
         } catch (Exception e) {
+            // TODO: handle exception
             e.printStackTrace();
             responseMessage.setMessage(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
