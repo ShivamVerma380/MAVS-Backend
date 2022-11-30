@@ -3,6 +3,7 @@ package com.mavs.backend.helper;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.apache.poi.sl.usermodel.PictureData;
@@ -18,8 +19,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mavs.backend.daos.product.ProductDao;
+import com.mavs.backend.entities.product.AdditionalFeatures;
 import com.mavs.backend.entities.product.FreeItem;
 import com.mavs.backend.entities.product.Product;
+import com.mavs.backend.entities.product.ProductDescription;
 
 import java.awt.image.BufferedImage;
 
@@ -216,6 +219,52 @@ public class ExcelHelper{
                                 System.out.println("Index:"+product.getModelNumber());
                                 // e.printStackTrace();
                                 flag = false;
+                            }
+                        break;
+                        case 10:
+                            try {
+                                value = formatter.formatCellValue(cell);
+                                if(product==null) break;
+                                if(value.trim().equals("-")){
+                                    break;
+                                }
+                                String[] productDesc = value.split("#");
+                                ArrayList<ProductDescription> list  = new ArrayList<>(); 
+                                for(int i=0;i<productDesc.length;i++){
+                                    String products[] = productDesc[i].split(";");
+                                    ProductDescription productDescription = new ProductDescription(products[0],products[1],products[2]);
+                                    list.add(productDescription);
+                                }
+                                product.setProductDescriptions(list);
+
+                            } catch (Exception e) {
+                                // e.printStackTrace();
+                                System.out.println("Product Description:"+product.getModelNumber());
+                                // responseMessage.setMessage(e.getMessage());
+                                // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+                            }
+                        break;
+                        case 11:
+                            try {
+                                value = formatter.formatCellValue(cell);
+                                if(product==null) break;
+                                if(value.trim().equals("-")){
+                                    break;
+                                }
+                                String[] addtionalFeat = value.split("#");
+                                ArrayList<AdditionalFeatures> list  = new ArrayList<>(); 
+                                for(int i=0;i<addtionalFeat.length;i++){
+                                    String features[] = addtionalFeat[i].split(";");
+                                    AdditionalFeatures additionalFeatures = new AdditionalFeatures(features[0], features[1]);
+                                    list.add(additionalFeatures);
+                                }
+                                product.setAdditionalFeatures(list);
+
+                            } catch (Exception e) {
+                                // e.printStackTrace();
+                                System.out.println("Additional Features:"+product.getModelNumber());
+                                // responseMessage.setMessage(e.getMessage());
+                                // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
                             }
                         break;
                         default:

@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.mavs.backend.helper.ExcelHelper;
 import com.mavs.backend.helper.ResponseMessage;
 import com.mavs.backend.services.solution.SolutionService;
 
@@ -26,6 +28,9 @@ public class SolutionController {
 
     @Autowired
     public SolutionService solutionService;
+
+    @Autowired
+    public ExcelHelper excelHelper;
 
     
     @PostMapping("/add-solution")
@@ -124,4 +129,17 @@ public class SolutionController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
     }
+
+    // @PostMapping("/excel/solutions")
+    // public ResponseEntity<?> addExcelSolutions(@RequestParam("file") MultipartFile file){
+    //     try {
+    //         return excelHelper.addExcelSolutions(file.getInputStream());
+    //     } catch (Exception e) {
+    //         // TODO: handle exception
+    //         e.printStackTrace();
+    //         responseMessage.setMessage(e.getMessage());
+    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+    //     }
+
+    // }
 }
