@@ -142,4 +142,16 @@ public class SolutionController {
         }
 
     }
+
+    @PostMapping("/excel/solcategory")
+    public ResponseEntity<?> addExcelSolCategory(@RequestParam("file") MultipartFile file){
+        try {
+            return excelHelper.addExcelSolCategory(file.getInputStream());
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
 }

@@ -6,6 +6,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.poi.sl.usermodel.PictureData;
 import org.apache.poi.ss.usermodel.Cell;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mavs.backend.daos.product.ProductDao;
+import com.mavs.backend.daos.solution.SolutionCategoryDao;
 import com.mavs.backend.daos.solution.SolutionDao;
 import com.mavs.backend.entities.product.AdditionalFeatures;
 import com.mavs.backend.entities.product.FreeItem;
@@ -27,6 +29,7 @@ import com.mavs.backend.entities.product.Product;
 import com.mavs.backend.entities.product.ProductDescription;
 import com.mavs.backend.entities.solution.Solution;
 import com.mavs.backend.entities.solution.SolutionBenefits;
+import com.mavs.backend.entities.solution.SolutionCategory;
 import com.mavs.backend.entities.solution.SolutionFeatures;
 
 import lombok.val;
@@ -44,6 +47,9 @@ public class ExcelHelper{
 
     @Autowired
     public SolutionDao solutionDao;
+
+    @Autowired
+    public SolutionCategoryDao solutionCategoryDao;
 
     public static boolean checkFileType(MultipartFile multipartFile){
         String contentType = multipartFile.getContentType();
@@ -542,4 +548,146 @@ public class ExcelHelper{
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
     }
+
+    public ResponseEntity<?> addExcelSolCategory(InputStream inputStream){
+        try {
+            String message="";
+            DataFormatter formatter = new DataFormatter();
+            PictureData pict;
+            byte[] data;
+            String value;
+            URL imageUrl;
+            String fileName;
+            MultipartFile multipartFile;
+            BufferedImage image;
+            ByteArrayOutputStream byteArrayOutputStream;
+
+            XSSFWorkbook workbook =  new XSSFWorkbook(inputStream);
+            XSSFSheet sheet = workbook.getSheet("SolutionCategory");
+            int rowNumber=0;
+
+            Iterator<Row> iterator = sheet.iterator();
+            FreeItem freeItem=null;
+            while(iterator.hasNext()){
+                Row row = iterator.next();
+                if(rowNumber<1){
+                    rowNumber++;
+                    continue;
+                }
+                Iterator<Cell> cells = row.iterator();
+                int cid=0;
+                SolutionCategory solutionCategory = new SolutionCategory();
+                String destinationFile = "sample.jpg";
+                boolean flag = true;
+
+                while(cells.hasNext()){
+                    Cell cell = cells.next();
+                    switch(cid){
+                        case 0:
+                            try {
+                                value = formatter.formatCellValue(cell);
+                                if(value.trim().equals("-")){
+                                    solutionCategory=null;
+                                    break;
+                                }
+                                solutionCategory.setCategory(value);
+                            } catch (Exception e) {
+                                System.out.println("Category Name:"+formatter.formatCellValue(cell));
+                                // e.printStackTrace();
+                                flag = false;
+                            }
+                        break;
+                        case 1:
+                        try {
+                            value = formatter.formatCellValue(cell);
+                            if(solutionCategory==null || value.trim().equals("-")){
+                                solutionCategory.setCatimg("");
+                                break;
+                            }
+                            solutionCategory.setCatimg(value);
+                        } catch (Exception e) {
+                            System.out.println("Category Image:"+solutionCategory.getCategory());
+                            // e.printStackTrace();
+                            flag = false;
+                        }
+                        break;
+                        case 2:
+                            try {
+                                value = formatter.formatCellValue(cell);
+                                if(solutionCategory==null || value.trim().equals("-")){
+                                    
+                                    solutionCategory.setCatdescription("");
+                                    break;
+                                }
+                                solutionCategory.setCatdescription(value);
+                            } catch (Exception e) {
+                                System.out.println("Category Description:"+solutionCategory.getCategory());
+                                // e.printStackTrace();
+                                flag = false;
+                            }
+                        break;
+                        case 3:
+                            try {
+                                value = formatter.formatCellValue(cell);
+                                if(solutionCategory==null) break;
+                                if(value.trim().equals("-")){
+                                    break;
+                                }
+                                String[] solutions = value.split(";");
+
+                                HashSet<String> hashSet = new HashSet<>();
+                                ArrayList<Solution> finalSolutions = new ArrayList<>();
+                                for(int i=0;i<solutions.length;i++){
+                                    try {
+                                        Solution solution = solutionDao.findSolutionByTitle(solutions[i]);
+                                        if(solution!=null){
+                                            hashSet.add(solutions[i]);
+                                            finalSolutions.add(solution);
+                                        }
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                        e.printStackTrace();
+                                    }
+                                }
+                                solutionCategory.setSolutions(finalSolutions);
+
+                            } catch (Exception e) {
+                                // e.printStackTrace();
+                                System.out.println("Products used:"+solutionCategory.getCategory());
+                                // responseMessage.setMessage(e.getMessage());
+                                // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+                            }
+                        break;
+                        default:
+                        break;
+                    }
+                    cid++;
+                }
+
+                try {
+                    if(flag || solutionCategory!=null || !solutionCategory.getCategory().equals("")){
+
+                        solutionCategoryDao.save(solutionCategory);
+                    }
+                    else{
+                        System.out.println("Category Details not saved"+solutionCategory.getCategory());
+                        message+=solutionCategory.getCategory()+",";
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                
+                rowNumber++;
+            }
+            responseMessage.setMessage("Solution Categories saved successfully:"+message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    
 }

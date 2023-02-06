@@ -1,5 +1,6 @@
 package com.mavs.backend.entities.solution;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -17,7 +18,7 @@ public class SolutionCategory {
 
     private String catdescription;
 
-    private List<Solution> solutions;
+    private ArrayList<Solution> solutions;
 
     
 
@@ -26,7 +27,7 @@ public class SolutionCategory {
 
 
 
-    public SolutionCategory(String category, String catimg, String catdescription,List<Solution> solutions) {
+    public SolutionCategory(String category, String catimg, String catdescription,ArrayList<Solution> solutions) {
         this.category = category;
         this.catimg = catimg;
         this.catdescription = catdescription;
@@ -77,7 +78,7 @@ public class SolutionCategory {
 
 
 
-    public void setSolutions(List<Solution> solutions) {
+    public void setSolutions(ArrayList<Solution> solutions) {
         this.solutions = solutions;
     }
 

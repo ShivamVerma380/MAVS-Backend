@@ -222,7 +222,7 @@ public class SolutionService {
             solutionCategoryDao.save(solution);
 
             List<Solution> sol = solutionDao.findAll();
-            List<Solution> new_sol = new ArrayList<>();
+            ArrayList<Solution> new_sol = new ArrayList<>();
             System.out.println("outside");
             for(int i=0;i<sol.size();i++){
                 System.out.println(sol.get(i).getSolcategory());
