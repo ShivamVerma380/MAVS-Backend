@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.catalina.connector.Response;
 import org.apache.poi.sl.usermodel.PictureData;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormatter;
@@ -21,12 +22,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mavs.backend.daos.product.ProductCategoryDao;
 import com.mavs.backend.daos.product.ProductDao;
 import com.mavs.backend.daos.solution.SolutionCategoryDao;
 import com.mavs.backend.daos.solution.SolutionDao;
 import com.mavs.backend.entities.product.AdditionalFeatures;
 import com.mavs.backend.entities.product.FreeItem;
 import com.mavs.backend.entities.product.Product;
+import com.mavs.backend.entities.product.ProductCategory;
 import com.mavs.backend.entities.product.ProductDescription;
 import com.mavs.backend.entities.solution.Solution;
 import com.mavs.backend.entities.solution.SolutionBenefits;
@@ -54,6 +57,9 @@ public class ExcelHelper{
 
     @Autowired
     public Product product;
+
+    @Autowired
+    public ProductCategoryDao productCategoryDao;
 
     public static boolean checkFileType(MultipartFile multipartFile){
         String contentType = multipartFile.getContentType();
@@ -346,6 +352,115 @@ public class ExcelHelper{
                 rowNumber++;
             }
             responseMessage.setMessage("Products saved successfully"+message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    public ResponseEntity<?> addExcelProductCategory(InputStream inputStream){
+        try {
+            String message="";
+            DataFormatter formatter = new DataFormatter();
+            PictureData pict;
+            byte[] data;
+            String value;
+            URL imageUrl;
+            String fileName;
+            MultipartFile multipartFile;
+            BufferedImage image;
+            ByteArrayOutputStream byteArrayOutputStream;
+
+            XSSFWorkbook workbook =  new XSSFWorkbook(inputStream);
+            XSSFSheet sheet = workbook.getSheet("ProductCategory");
+            int rowNumber=0;
+
+            Iterator<Row> iterator = sheet.iterator();
+            FreeItem freeItem=null;
+            while(iterator.hasNext()){
+                Row row = iterator.next();
+                if(rowNumber<1){
+                    rowNumber++;
+                    continue;
+                }
+                Iterator<Cell> cells = row.iterator();
+                int cid=0;
+                ProductCategory productCategory = new ProductCategory();
+                String destinationFile = "sample.jpg";
+                boolean flag = true;
+
+                while(cells.hasNext()){
+                    Cell cell = cells.next();
+                    switch(cid){
+                        case 0:
+                            try {
+                                value = formatter.formatCellValue(cell);
+                                if(value.trim().equals("-")){
+                                    productCategory=null;
+                                    break;
+                                }
+                                productCategory.setProductcategory(value);
+                            } catch (Exception e) {
+                                System.out.println("Category Name:"+formatter.formatCellValue(cell));
+                                // e.printStackTrace();
+                                flag = false;
+                            }
+                        break;
+                        case 1:
+                        try {
+                            value = formatter.formatCellValue(cell);
+                            if(productCategory==null) break;
+                            if(value.trim().equals("-")){
+                                break;
+                            }
+                            String[] modelNums = value.split(";");
+
+                            HashSet<String> hashSet = new HashSet<>();
+                            for(int i=0;i<modelNums.length;i++){
+                                try {
+                                    Product product = productDao.findProductBymodelNumber(modelNums[i]);
+                                    if(product!=null){
+                                        hashSet.add(modelNums[i]);
+                                    }
+                                } catch (Exception e) {
+                                    // TODO: handle exception
+                                    e.printStackTrace();
+                                }
+                            }
+                            productCategory.setModelNum(new ArrayList<>(hashSet));
+
+                        } catch (Exception e) {
+                            // e.printStackTrace();
+                            System.out.println("Products used:"+productCategory.getProductcategory());
+                            // responseMessage.setMessage(e.getMessage());
+                            // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+                        }
+                        break;
+                        default:
+                        break;
+                    }
+                    cid++;
+                }
+
+                try {
+                    if(flag || productCategory!=null || !productCategory.getProductcategory().equals("")){
+
+                        productCategoryDao.save(productCategory);
+                    }
+                    else{
+                        System.out.println("Category Details not saved"+productCategory.getProductcategory());
+                        message+=productCategory.getProductcategory()+",";
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                
+                rowNumber++;
+            }
+            responseMessage.setMessage("Product Categories saved successfully:"+message);
             return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
         } catch (Exception e) {
             // TODO: handle exception

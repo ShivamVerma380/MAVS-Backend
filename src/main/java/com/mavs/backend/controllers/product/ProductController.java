@@ -130,4 +130,16 @@ public class ProductController {
         }
     }
 
+    @PostMapping("/excel/productcategory")
+    public ResponseEntity<?> addExcelProductCategory(@RequestParam("file") MultipartFile file){
+        try {
+            return excelHelper.addExcelProductCategory(file.getInputStream());
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
 }
