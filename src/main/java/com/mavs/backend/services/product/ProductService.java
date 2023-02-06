@@ -88,6 +88,30 @@ public class ProductService {
         }
     }
 
+    public ResponseEntity<?> deleteAllProducts(String authorization){
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            admin = adminDao.findAdminByEmail(email);
+            if(admin==null){
+                responseMessage.setMessage("Only admins can delete product");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+            }
+
+            List<Product> products = productDao.findAll();
+            if(products!=null){
+                productDao.deleteAll();
+            }
+            responseMessage.setMessage("all products deleted successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
     public ResponseEntity<?> getProducts(){
         try {
             List<Product> productDetails = productDao.findAll();
