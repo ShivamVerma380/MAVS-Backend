@@ -165,6 +165,30 @@ public class SolutionService {
         }
     }
 
+    public ResponseEntity<?> deleteAllSolutions(String authorization){
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            admin = adminDao.findAdminByEmail(email);
+            if(admin==null){
+                responseMessage.setMessage("Only admins can delete solution");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+            }
+
+            List<Solution> solutions = solutionDao.findAll();
+            if(solutions!=null){
+                solutionDao.deleteAll();
+            }
+            responseMessage.setMessage("all solutions deleted successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
     public ResponseEntity<?> getAllSolutions(){
         try {
             List<Solution> solutions = solutionDao.findAll();
