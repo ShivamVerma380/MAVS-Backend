@@ -245,6 +245,33 @@ public class HomeService {
         }
     }
 
+    public ResponseEntity<?> deleteCompanyDescription(String authorization, String title){
+        try {
+            String token = authorization.substring(7);
+                String email = jwtUtil.extractUsername(token);
+                admin = adminDao.findAdminByEmail(email);
+                if(admin==null){
+                    responseMessage.setMessage("Only admins can delete details");
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+                }
+            
+            CompanyDescription companyDescription = companyDescriptionDao.findCompanyDescriptionByTitle(title);
+            if(companyDescription!=null){
+                companyDescriptionDao.delete(companyDescription);
+            }
+
+            responseMessage.setMessage("description deleted successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+            
+            
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body((responseMessage));
+        }
+    }
+
     public ResponseEntity<?> getCompanyDescription(){
         try {
             List<CompanyDescription> companyDescriptions = companyDescriptionDao.findAll();

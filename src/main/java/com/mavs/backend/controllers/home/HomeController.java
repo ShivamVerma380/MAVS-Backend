@@ -135,6 +135,18 @@ public class HomeController {
         }
     }
 
+    @DeleteMapping("/deleteCompanyDescription")
+    public ResponseEntity<?> deleteCompanyDescription(@RequestHeader("Authorization") String authorization,@RequestParam("title") String title){
+        try {
+            return homeService.deleteCompanyDescription(authorization,title);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body((responseMessage));
+        }
+    }
+
     @GetMapping("/getCompanyDescription")
     public ResponseEntity<?> getCompanyDescription(){
         try {
