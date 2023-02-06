@@ -274,6 +274,30 @@ public class SolutionService {
         }
     }
 
+    public ResponseEntity<?> deleteSolutionCategories(String authorization){
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            admin = adminDao.findAdminByEmail(email);
+            if(admin==null){
+                responseMessage.setMessage("Only admins can delete solution categories");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+            }
+            List<SolutionCategory> solutionCategories = solutionCategoryDao.findAll();
+            if(solutionCategories!=null){
+                solutionCategoryDao.deleteAll();
+            }
+
+            responseMessage.setMessage("solution categories deleted successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
     public ResponseEntity<?> getSolutionCategories(){
         try {
             List<SolutionCategory> solutionCategory = solutionCategoryDao.findAll();
