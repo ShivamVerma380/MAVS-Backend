@@ -143,6 +143,32 @@ public class HomeService {
         }
     }
 
+    public ResponseEntity<?> deleteHomeCover(String authorization, String description){
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            admin = adminDao.findAdminByEmail(email);
+            if(admin==null){
+                responseMessage.setMessage("Only admins can delete details");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+            }
+
+            HomeCover homeCover = homeCoverDao.findHomeCoverByDescription(description);
+            if(homeCover!=null){
+                homeCoverDao.delete(homeCover);
+            }
+
+            responseMessage.setMessage("Details Deleted Successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+            
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
     public ResponseEntity<?> getHomeCovers(){
         try {
             List<HomeCover> homeCovers = homeCoverDao.findAll();

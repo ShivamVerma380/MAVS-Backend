@@ -75,6 +75,18 @@ public class HomeController {
         }
     }
 
+    @DeleteMapping("/deleteHomeCover")
+    public ResponseEntity<?> deleteHomeCover(@RequestParam("description") String description,@RequestHeader("Authorization") String authorization){
+        try {
+            return homeService.deleteHomeCover(authorization,description);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body((responseMessage));
+        }
+    }
+
     @GetMapping("/gethomecover")
     public ResponseEntity<?> getHomeCovers(){
         try {
