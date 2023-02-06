@@ -1,6 +1,7 @@
 package com.mavs.backend.entities.product;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -34,6 +35,8 @@ public class Product {
 
         private ArrayList<AdditionalFeatures> additionalFeatures;
 
+        private HashMap<String,HashMap<String,String>> productSpecifications;
+
         private ArrayList<String> imgsrc;
 
         private String index;
@@ -48,7 +51,7 @@ public class Product {
         public Product(String modelNumber, String productId, String productName, String productHighlights,
                 String productImage1, String productImage2, String productImage3, String productPrice,
                 String productVideoLink, String productCategory, ArrayList<ProductDescription> productDescriptions,
-                ArrayList<AdditionalFeatures> additionalFeatures, ArrayList<String> imgsrc,String index) {
+                ArrayList<AdditionalFeatures> additionalFeatures,HashMap<String, HashMap<String, String>> productSpecifications, ArrayList<String> imgsrc,String index) {
             this.modelNumber = modelNumber;
             this.productId = productId;
             this.productName = productName;
@@ -63,6 +66,7 @@ public class Product {
             this.additionalFeatures = additionalFeatures;
             this.imgsrc = imgsrc;
             this.index = index;
+            this.productSpecifications = productSpecifications;
         }
 
 
@@ -194,6 +198,17 @@ public class Product {
         }
 
 
+        public HashMap<String, HashMap<String, String>> getProductSpecifications() {
+            return productSpecifications;
+        }
+
+
+
+        public void setProductSpecifications(HashMap<String, HashMap<String, String>> productSpecifications) {
+            this.productSpecifications = productSpecifications;
+        }
+
+
 
         @Override
         public String toString() {
@@ -202,9 +217,10 @@ public class Product {
                     + ", productImage2=" + productImage2 + ", productImage3=" + productImage3 + ", productPrice="
                     + productPrice + ", productVideoLink=" + productVideoLink + ", productCategory=" + productCategory
                     + ", productDescriptions=" + productDescriptions + ", additionalFeatures=" + additionalFeatures
-                    + ", imgsrc=" + imgsrc + ", index=" + index + "]";
+                    + ", productSpecifications=" + productSpecifications + ", imgsrc=" + imgsrc + ", index=" + index
+                    + "]";
         }
 
         
-        
+       
 }

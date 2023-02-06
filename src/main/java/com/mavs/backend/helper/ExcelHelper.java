@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -50,6 +51,9 @@ public class ExcelHelper{
 
     @Autowired
     public SolutionCategoryDao solutionCategoryDao;
+
+    @Autowired
+    public Product product;
 
     public static boolean checkFileType(MultipartFile multipartFile){
         String contentType = multipartFile.getContentType();
@@ -281,6 +285,45 @@ public class ExcelHelper{
                                 System.out.println("Additional Features:"+product.getModelNumber());
                                 // responseMessage.setMessage(e.getMessage());
                                 // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+                            }
+                        break;
+                        case 12:
+                            try {
+                                HashMap<String,HashMap<String,String>> productSpecs = new HashMap<>();
+                                value = formatter.formatCellValue(cell);
+                                if(value.trim().equals("-")){
+                                    product.setProductSpecifications(new HashMap<>());
+                                    break;
+                                }
+                                String array[] = value.split("#");
+                                for(int i=0;i<array.length;i++){
+                                    //System.out.println(array[i]);
+                                    String subSplit[] = array[i].split("\\[");
+                                    HashMap<String,String> mp = new HashMap<>();
+                                // System.out.println(subSplit.length);
+                                    String x = subSplit[1];
+                                    String innermap = x.substring(0,x.length()-1);
+                                    //System.out.println("0:"+subSplit[0]+"\t1:"+innermap);
+                                    String keyValue[] = innermap.split(";");
+                                    for(int j=0;j<keyValue.length;j++){
+                                        //System.out.println("KeyValue:"+keyValue[j]);
+                                        String pair[] = keyValue[j].split("=");
+                                        try {
+                                            //System.out.println("pair[0]="+pair[0]+"\tpair[1]="+pair[1]);
+                                            mp.put(pair[0],pair[1]);
+                                        } catch (Exception e) {
+                                            // e.printStackTrace();
+                                            flag = false;
+                                            System.out.println("Product Specifications:"+product.getModelNumber());
+                                        }
+                                    }
+                                    productSpecs.put(subSplit[0],mp);
+                                }
+                                product.setProductSpecifications(productSpecs);
+                            } catch (Exception e) {
+                                flag = false;
+                                System.out.println("Product Specifications:"+product.getModelNumber());
+                                
                             }
                         break;
                         default:
