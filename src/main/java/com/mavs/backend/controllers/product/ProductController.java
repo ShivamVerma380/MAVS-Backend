@@ -156,4 +156,16 @@ public class ProductController {
         }
     }
 
+    @DeleteMapping("/delete-productcategory")
+    public ResponseEntity<?> deleteProductCategories(@RequestHeader("Authorization") String authorization){
+        try {
+            return productService.deleteProductCategories(authorization);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
 }
