@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -90,6 +91,18 @@ public class HomeController {
     public ResponseEntity<?> addAchievements(@RequestHeader("Authorization") String authorization,@RequestParam("img") String img){
         try {
             return homeService.addAchievements(authorization, img);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body((responseMessage));
+        }
+    }
+
+    @DeleteMapping("/deleteAchievements")
+    public ResponseEntity<?> deleteAchievements(@RequestHeader("Authorization") String authorization,@RequestParam("img") String img){
+        try {
+            return homeService.deleteAchievements(authorization,img);
         } catch (Exception e) {
             // TODO: handle exception
             e.printStackTrace();

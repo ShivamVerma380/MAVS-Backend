@@ -179,6 +179,34 @@ public class HomeService {
         }
     }
 
+    public ResponseEntity<?> deleteAchievements(String authorization, String img){
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            admin = adminDao.findAdminByEmail(email);
+            if(admin==null){
+                responseMessage.setMessage("Only admins can delete details");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+            }
+
+            Achievements achievements = achievementsDao.findAchievementsByAchievementImg(img);
+            if(achievements!=null){
+                achievementsDao.delete(achievements);
+            }
+
+            responseMessage.setMessage("achievements deleted successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+
+            
+            
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body((responseMessage));
+        }
+    }
+
     public ResponseEntity<?> getAchievements(){
         try {
             List<Achievements> achievements = achievementsDao.findAll();
