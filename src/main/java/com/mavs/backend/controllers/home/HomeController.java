@@ -124,6 +124,18 @@ public class HomeController {
         }
     }
 
+    @DeleteMapping("/deleteAchievements/{img}")
+    public ResponseEntity<?> deleteAchievementsNew(@RequestHeader("Authorization") String authorization,@PathVariable("img") String img){
+        try {
+            return homeService.deleteAchievements(authorization,img);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body((responseMessage));
+        }
+    }
+
     @GetMapping("/getAchievements")
     public ResponseEntity<?> getAchievements(){
         try {
