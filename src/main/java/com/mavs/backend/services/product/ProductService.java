@@ -51,7 +51,7 @@ public class ProductService {
     public ProductCategoryDao productCategoryDao;
     
     public ResponseEntity<?> addProductDetail( String modelNumber,String productName, String productHighlights,
-            String productPrice, String productImage1, String productImage2, String productImage3,String videoLink,String productCategory,ArrayList<String> imgSrc,String authorization) {
+            String productPrice, String productImage1, String productImage2, String productImage3,String videoLink,String productCategory,ArrayList<String> imgSrc,String authorization, String brochureLink) {
         try {
             String token = authorization.substring(7);
             String email = jwtUtil.extractUsername(token);
@@ -74,6 +74,7 @@ public class ProductService {
             productDetail.setProductName(productName);
             productDetail.setImgsrc(imgSrc);
             productDetail.setIndex("0");
+            productDetail.setBrochureLink(brochureLink);
             
             
             
@@ -156,6 +157,7 @@ public class ProductService {
                 productsDetailsResponse.setProductDescriptions(productDetails.get(i).getProductDescriptions());
                 productsDetailsResponse.setImgSrc(productDetails.get(i).getImgsrc());
                 productsDetailsResponse.setIndex(productDetails.get(i).getIndex());
+                productsDetailsResponse.setBrochureLink(productDetails.get(i).getBrochureLink());
                 
                 productsDetailsResponses.add(productsDetailsResponse);
                 

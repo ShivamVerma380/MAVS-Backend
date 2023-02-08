@@ -41,6 +41,8 @@ public class Product {
 
         private String index;
 
+        private String brochureLink;
+
         
 
         public Product() {
@@ -51,7 +53,7 @@ public class Product {
         public Product(String modelNumber, String productId, String productName, String productHighlights,
                 String productImage1, String productImage2, String productImage3, String productPrice,
                 String productVideoLink, String productCategory, ArrayList<ProductDescription> productDescriptions,
-                ArrayList<AdditionalFeatures> additionalFeatures,HashMap<String, HashMap<String, String>> productSpecifications, ArrayList<String> imgsrc,String index) {
+                ArrayList<AdditionalFeatures> additionalFeatures,HashMap<String, HashMap<String, String>> productSpecifications, ArrayList<String> imgsrc,String index, String brochureLink) {
             this.modelNumber = modelNumber;
             this.productId = productId;
             this.productName = productName;
@@ -67,6 +69,7 @@ public class Product {
             this.imgsrc = imgsrc;
             this.index = index;
             this.productSpecifications = productSpecifications;
+            this.brochureLink = brochureLink;
         }
 
 
@@ -210,6 +213,18 @@ public class Product {
 
 
 
+        public String getBrochureLink() {
+            return brochureLink;
+        }
+
+
+
+        public void setBrochureLink(String brochureLink) {
+            this.brochureLink = brochureLink;
+        }
+
+
+
         @Override
         public String toString() {
             return "Product [modelNumber=" + modelNumber + ", productId=" + productId + ", productName=" + productName
@@ -218,8 +233,10 @@ public class Product {
                     + productPrice + ", productVideoLink=" + productVideoLink + ", productCategory=" + productCategory
                     + ", productDescriptions=" + productDescriptions + ", additionalFeatures=" + additionalFeatures
                     + ", productSpecifications=" + productSpecifications + ", imgsrc=" + imgsrc + ", index=" + index
-                    + "]";
+                    + ", brochureLink=" + brochureLink + "]";
         }
+
+        
 
         
        

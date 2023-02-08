@@ -33,6 +33,8 @@ public class ProductsDetailsResponse {
     private ArrayList<String> imgSrc;
 
     private String index;
+
+    private String brochureLink;
     
 
     public ProductsDetailsResponse() {
@@ -47,7 +49,7 @@ public class ProductsDetailsResponse {
     public ProductsDetailsResponse(String modelNumber, String productName, String productHighlights,
             String productImage1, String productImage2, String productImage3, String videoLink, String productPrice,
             ArrayList<ProductDescription> productDescriptions, ArrayList<AdditionalFeatures> additionalFeatures,
-            ArrayList<String> imgSrc,String index) {
+            ArrayList<String> imgSrc,String index,String brochureLink) {
         this.modelNumber = modelNumber;
         this.productName = productName;
         this.productHighlights = productHighlights;
@@ -60,11 +62,12 @@ public class ProductsDetailsResponse {
         this.additionalFeatures = additionalFeatures;
         this.imgSrc = imgSrc;
         this.index = index;
+        this.brochureLink = brochureLink;
     }
 
 
 
-
+    
 
 
 
@@ -220,29 +223,6 @@ public class ProductsDetailsResponse {
 
 
 
-    
-
-
-
-
-
-
-
-    @Override
-    public String toString() {
-        return "ProductsDetailsResponse [modelNumber=" + modelNumber + ", productName=" + productName
-                + ", productHighlights=" + productHighlights + ", productImage1=" + productImage1 + ", productImage2="
-                + productImage2 + ", productImage3=" + productImage3 + ", videoLink=" + videoLink + ", productPrice="
-                + productPrice + ", productDescriptions=" + productDescriptions + ", additionalFeatures="
-                + additionalFeatures + ", imgSrc=" + imgSrc + ", index=" + index + "]";
-    }
-
-
-
-
-
-
-
     public String getIndex() {
         return index;
     }
@@ -257,6 +237,43 @@ public class ProductsDetailsResponse {
         this.index = index;
     }
 
+
+
+
+
+
+
+    public String getBrochureLink() {
+        return brochureLink;
+    }
+
+
+
+
+
+
+
+    public void setBrochureLink(String brochureLink) {
+        this.brochureLink = brochureLink;
+    }
+
+
+
+
+
+
+
+    @Override
+    public String toString() {
+        return "ProductsDetailsResponse [modelNumber=" + modelNumber + ", productName=" + productName
+                + ", productHighlights=" + productHighlights + ", productImage1=" + productImage1 + ", productImage2="
+                + productImage2 + ", productImage3=" + productImage3 + ", videoLink=" + videoLink + ", productPrice="
+                + productPrice + ", productDescriptions=" + productDescriptions + ", additionalFeatures="
+                + additionalFeatures + ", imgSrc=" + imgSrc + ", index=" + index + ", brochureLink=" + brochureLink
+                + "]";
+    }
+
+    
     
 
 

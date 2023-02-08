@@ -332,6 +332,18 @@ public class ExcelHelper{
                                 
                             }
                         break;
+                        case 13:
+                            try {
+                                value = formatter.formatCellValue(cell);
+                                if(product==null || value.trim().equals("-")) break;
+                                product.setBrochureLink(value);
+                            } catch (Exception e) {
+                                // TODO: handle exception
+                                System.out.println("Brochure Link:"+product.getModelNumber());
+                                // e.printStackTrace();
+                                flag = false;
+                            }
+                        break;
                         default:
                         break;
                     }
