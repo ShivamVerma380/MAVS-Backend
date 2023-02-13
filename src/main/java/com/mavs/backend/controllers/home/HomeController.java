@@ -208,5 +208,17 @@ public class HomeController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body((responseMessage));
         }
     }
+
+    @PostMapping("/successCount")
+    public ResponseEntity<?> addCounter(@RequestHeader("Authorization") String authorization,@RequestParam("parameter") String parameter, @RequestParam("count") String count){
+        try {
+            return homeService.addCounter(authorization,parameter,count);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body((responseMessage));
+        }
+    }
     
 }
