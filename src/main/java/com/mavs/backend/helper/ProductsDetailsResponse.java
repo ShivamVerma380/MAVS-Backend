@@ -35,6 +35,8 @@ public class ProductsDetailsResponse {
     private String index;
 
     private String brochureLink;
+
+    private HashMap<String,HashMap<String,String>> productSpecifications;
     
 
     public ProductsDetailsResponse() {
@@ -49,7 +51,7 @@ public class ProductsDetailsResponse {
     public ProductsDetailsResponse(String modelNumber, String productName, String productHighlights,
             String productImage1, String productImage2, String productImage3, String videoLink, String productPrice,
             ArrayList<ProductDescription> productDescriptions, ArrayList<AdditionalFeatures> additionalFeatures,
-            ArrayList<String> imgSrc,String index,String brochureLink) {
+            ArrayList<String> imgSrc,String index,String brochureLink,HashMap<String,HashMap<String,String>> productSpecifications) {
         this.modelNumber = modelNumber;
         this.productName = productName;
         this.productHighlights = productHighlights;
@@ -63,6 +65,7 @@ public class ProductsDetailsResponse {
         this.imgSrc = imgSrc;
         this.index = index;
         this.brochureLink = brochureLink;
+        this.productSpecifications = productSpecifications;
     }
 
 
@@ -259,6 +262,18 @@ public class ProductsDetailsResponse {
 
 
 
+    public HashMap<String, HashMap<String, String>> getProductSpecifications() {
+        return productSpecifications;
+    }
+
+
+
+    public void setProductSpecifications(HashMap<String, HashMap<String, String>> productSpecifications) {
+        this.productSpecifications = productSpecifications;
+    }
+
+
+
 
 
 
@@ -270,7 +285,7 @@ public class ProductsDetailsResponse {
                 + productImage2 + ", productImage3=" + productImage3 + ", videoLink=" + videoLink + ", productPrice="
                 + productPrice + ", productDescriptions=" + productDescriptions + ", additionalFeatures="
                 + additionalFeatures + ", imgSrc=" + imgSrc + ", index=" + index + ", brochureLink=" + brochureLink
-                + "]";
+                + ", productSpecifications=" + productSpecifications + "]";
     }
 
     

@@ -2,6 +2,7 @@ package com.mavs.backend.services.product;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -158,6 +159,7 @@ public class ProductService {
                 productsDetailsResponse.setImgSrc(productDetails.get(i).getImgsrc());
                 productsDetailsResponse.setIndex(productDetails.get(i).getIndex());
                 productsDetailsResponse.setBrochureLink(productDetails.get(i).getBrochureLink());
+                productsDetailsResponse.setProductSpecifications(productDetails.get(i).getProductSpecifications());
                 
                 productsDetailsResponses.add(productsDetailsResponse);
                 
@@ -242,6 +244,45 @@ public class ProductService {
             return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
 
             
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    public ResponseEntity<?> addProductSpecifications(String authorization,String modelNumber,HashMap<String,HashMap<String,String>> productSpecs){
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            admin = adminDao.findAdminByEmail(email);
+            if (admin == null) {
+                responseMessage.setMessage("Only admin can add product specifications");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+            Product existingProduct = productDao.findProductBymodelNumber(modelNumber);
+            if (productSpecs == null) {
+                responseMessage.setMessage("Product Specs is Empty");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+            
+            if (existingProduct == null) {
+                responseMessage.setMessage("Product Not Found!!");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+            // existingProductDetail.setProductInformation(productDetail);
+            try {
+                existingProduct.setProductSpecifications(productSpecs);
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+            }
+
+            productDao.save(existingProduct);
+            responseMessage.setMessage("Product Specifications Saved Successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
         } catch (Exception e) {
             // TODO: handle exception
             e.printStackTrace();
