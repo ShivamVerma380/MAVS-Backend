@@ -256,5 +256,19 @@ public class HomeController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body((responseMessage));
         }
     }
+
+    @DeleteMapping("/deleteCounter/{parameter}")
+    public ResponseEntity<?> deleteCounter(@RequestHeader("Authorization") String authorization,@PathVariable("parameter") String parameter){
+        try {
+            return homeService.deleteCounter(authorization, parameter);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body((responseMessage));
+        }
+    }
+
+    
     
 }

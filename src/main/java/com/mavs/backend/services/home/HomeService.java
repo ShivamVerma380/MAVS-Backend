@@ -203,6 +203,32 @@ public class HomeService {
         }
     }
 
+    public ResponseEntity<?> deleteCounter(String authorization, String parameter){
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            admin = adminDao.findAdminByEmail(email);
+            if(admin==null){
+                responseMessage.setMessage("Only admins can delete details");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+            }
+
+            Counter counter = counterDao.findCounterByParameter(parameter);
+            if(counter!=null){
+                counterDao.delete(counter);
+            }
+
+            responseMessage.setMessage("counter deleted");
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+            
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
     public ResponseEntity<?> addHomeCovers(String authorization,String video,String coverdescription){
         try {
             String token = authorization.substring(7);
