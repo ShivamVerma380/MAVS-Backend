@@ -232,5 +232,17 @@ public class HomeController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body((responseMessage));
         }
     }
+
+    @GetMapping("/getCountByParameter/{parameter}")
+    public ResponseEntity<?> getCountById(@PathVariable("parameter") String parameter){
+        try {
+            return homeService.getCountById(parameter);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body((responseMessage));
+        }
+    }
     
 }
