@@ -244,5 +244,17 @@ public class HomeController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body((responseMessage));
         }
     }
+
+    @DeleteMapping("/deleteAllCounters")
+    public ResponseEntity<?> deleteAllCounters(@RequestHeader("Authorization") String authorization){
+        try {
+            return homeService.deleteAllCounters(authorization);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body((responseMessage));
+        }
+    }
     
 }
