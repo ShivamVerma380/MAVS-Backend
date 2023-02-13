@@ -180,6 +180,18 @@ public class SolutionController {
         }
     }
 
+    @DeleteMapping("/deleteSolutionById/{category}")
+    public ResponseEntity<?> deleteSolutionCategoryById(@RequestHeader("Authorization") String authorization,@PathVariable("category") String category){
+        try {
+            return solutionService.deleteSolutionCategoryById(authorization, category);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
     @PostMapping("/excel/solcategory")
     public ResponseEntity<?> addExcelSolCategory(@RequestParam("file") MultipartFile file){
         try {
