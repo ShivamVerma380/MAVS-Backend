@@ -138,7 +138,7 @@ public class ProductService {
         }
     }
 
-    public ResponseEntity deleteProductCategories(String authorization){
+    public ResponseEntity<?> deleteProductCategories(String authorization){
         try {
             String token = authorization.substring(7);
             String email = jwtUtil.extractUsername(token);
@@ -154,6 +154,32 @@ public class ProductService {
             }
 
             responseMessage.setMessage("product categories deleted successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+            
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    public ResponseEntity<?> deleteProductCategoryByName(String authorization,String productcategory){
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            admin = adminDao.findAdminByEmail(email);
+            if(admin==null){
+                responseMessage.setMessage("Only admins can delete product category");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+            }
+
+            ProductCategory productCategory = productCategoryDao.findProductCategoryByProductcategory(productcategory);
+            if(productCategory!=null){
+                productCategoryDao.delete(productCategory);
+            }
+
+            responseMessage.setMessage("product category deleted successfully");
             return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
             
         } catch (Exception e) {

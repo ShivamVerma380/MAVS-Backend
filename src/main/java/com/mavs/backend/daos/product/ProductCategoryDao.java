@@ -7,4 +7,5 @@ import com.mavs.backend.entities.product.ProductCategory;
 public interface ProductCategoryDao extends MongoRepository<ProductCategory,String> {
     
     // public ProductCategory findCategoryByProductCategory(String productcategory);
+    public ProductCategory findProductCategoryByProductcategory(String productcategory);
 }

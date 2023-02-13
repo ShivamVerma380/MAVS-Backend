@@ -156,6 +156,18 @@ public class SolutionController {
         }
     }
 
+    @DeleteMapping("/deleteSolutionsById/{title}")
+    public ResponseEntity<?> deleteSolutionsById(@RequestHeader("Authorization") String authorization,@PathVariable("title") String title){
+        try {
+            return solutionService.deleteSolutionsById(authorization, title);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
     @DeleteMapping("/delete-solutioncategory")
     public ResponseEntity<?> deleteSolutionCategories(@RequestHeader("Authorization") String authorization){
         try {

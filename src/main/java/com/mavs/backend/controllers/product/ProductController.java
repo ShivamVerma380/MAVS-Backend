@@ -195,4 +195,17 @@ public class ProductController {
         }
     }
 
+    @DeleteMapping("/deleteProductCategory/{productcategory}")
+    public ResponseEntity<?> deleteProductCategoryByName(@RequestHeader("Authorization") String authorization,@PathVariable("productcategory") String productcategory){
+        try {
+            return productService.deleteProductCategoryByName(authorization, productcategory);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+
 }
