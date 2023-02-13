@@ -152,6 +152,19 @@ public class HomeService {
         }
     }
 
+    public ResponseEntity<?> getCount(){
+        try {
+            List<Counter> counters = counterDao.findAll();
+
+            return ResponseEntity.status(HttpStatus.OK).body(counters);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
     public ResponseEntity<?> addHomeCovers(String authorization,String video,String coverdescription){
         try {
             String token = authorization.substring(7);
