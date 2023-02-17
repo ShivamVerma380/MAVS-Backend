@@ -83,6 +83,16 @@ public class SolutionService {
             solution.setProductused(new ArrayList<>(hashSet));
             solutionDao.save(solution);
 
+            List<SolutionCategory> solutionCategories = solutionCategoryDao.findAll();
+            if(solutionCategories!=null){
+                for(int i=0;i<solutionCategories.size();i++){
+                    if(solcategory.equals(solutionCategories.get(i).getCategory())){
+                        solutionCategories.get(i).getSolutions().add(solution);
+                        solutionCategoryDao.save(solutionCategories.get(i));
+                    }
+                }
+            }
+
 
             responseMessage.setMessage("Solution saved successfully");
             return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
