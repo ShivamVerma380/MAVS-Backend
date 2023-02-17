@@ -179,6 +179,10 @@ public class SolutionService {
             if(solutions!=null){
                 solutionDao.deleteAll();
             }
+            List<SolutionCategory> solutionCategories = solutionCategoryDao.findAll();
+            if(solutionCategories!=null){
+                solutionCategoryDao.deleteAll();
+            }
             responseMessage.setMessage("all solutions deleted successfully");
             return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
         } catch (Exception e) {
@@ -203,6 +207,19 @@ public class SolutionService {
             if(solution!=null){
                 solutionDao.delete(solution);
             }
+
+            List<SolutionCategory> solutionCategories = solutionCategoryDao.findAll();
+            for(int i=0;i<solutionCategories.size();i++){
+                SolutionCategory solutionCategory = solutionCategories.get(i);
+                List<Solution> solutions = solutionCategory.getSolutions();
+                for(int j=0;j<solutions.size();j++){
+                    if(title.equals(solutions.get(j).getTitle())){
+                        solutionCategory.getSolutions().remove(j);
+                        solutionCategoryDao.save(solutionCategory);
+                    }
+                }
+            }
+
             responseMessage.setMessage(" solution deleted successfully");
             return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
         } catch (Exception e) {
