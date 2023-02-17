@@ -80,6 +80,13 @@ public class ProductService {
             
             
             productDao.save(productDetail);
+
+            ProductCategory productCategory2 = productCategoryDao.findProductCategoryByProductcategory(productCategory);
+            if(productCategory2!=null){
+                productCategory2.getModelNum().add(modelNumber);
+                productCategoryDao.save(productCategory2);
+            }
+            
             responseMessage.setMessage("Model saved successfully");
             return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
 
@@ -104,6 +111,12 @@ public class ProductService {
             if(products!=null){
                 productDao.deleteAll();
             }
+
+            List<ProductCategory> productCategories = productCategoryDao.findAll();
+            if(productCategories!=null){
+                productCategoryDao.deleteAll();
+            }
+
             responseMessage.setMessage("all products deleted successfully");
             return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
         } catch (Exception e) {
@@ -127,7 +140,32 @@ public class ProductService {
             Product product = productDao.findProductBymodelNumber(modelNumber);
             if(product!=null){
                 productDao.delete(product);
+                List<ProductCategory> productCategories = productCategoryDao.findAll();
+                for(int i=0;i<productCategories.size();i++){
+                    ProductCategory productCategory = productCategories.get(i);
+                    System.out.println("inside for");
+                    System.out.println(productCategory);
+                    List<String> modelnums = productCategory.getModelNum();
+                    System.out.println(modelnums);
+                    System.out.println(modelnums.size());
+                    
+                    for(int j=0;j<modelnums.size();j++){
+                        System.out.println("inside double for");
+                        System.out.println(modelNumber);
+                        System.out.println(modelnums.get(j));
+                        if(modelNumber.equals(modelnums.get(j))){
+                            System.out.println("in if");
+                            
+                            productCategory.getModelNum().remove(j);
+                        }
+                    }
+                    productCategoryDao.save(productCategory);
+                }
+                
             }
+            
+
+
             responseMessage.setMessage("product deleted successfully");
             return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
         } catch (Exception e) {
