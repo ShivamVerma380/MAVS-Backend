@@ -51,6 +51,18 @@ public class HomeController {
         }
     }
 
+    @DeleteMapping("/deleteNavbar")
+    public ResponseEntity<?> deleteNavbar(){
+        try {
+            return homeService.deleteNavbar();
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body((responseMessage));
+        }
+    }
+
     @GetMapping("/getNavbar")
     public ResponseEntity<?> getNavbarDetails(){
         try {

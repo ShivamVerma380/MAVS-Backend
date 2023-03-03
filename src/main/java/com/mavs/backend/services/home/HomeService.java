@@ -111,6 +111,22 @@ public class HomeService {
         }
     }
 
+    public ResponseEntity<?> deleteNavbar(){
+        try {
+            List<Home> homes = homedao.findAll();
+            if(homes!=null){
+                homedao.deleteAll();
+            }
+            responseMessage.setMessage("Navbar Deleted Successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
     public ResponseEntity<?> getNavbarDetails(){
         try {
             List<Home> home  = homedao.findAll();
