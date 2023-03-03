@@ -90,11 +90,13 @@ public class AdminService {
             if(admin!=null){
                 BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
                 if(bCryptPasswordEncoder.matches(password, admin.getPassword())){
-                    loginResponse.setMessage(admin.getName()+" logged in successfully!");
-                    
+                    jwtResponse.setMessage(admin.getName()+" logged in successfully!");
+                    UserDetails userDetails = customUserDetailsService.loadUserByUsername(email);
+                    String token = jwtUtil.generateToken(userDetails);
 
+                    jwtResponse.setToken(token);
                     
-                    return ResponseEntity.status(HttpStatus.OK).body(loginResponse);
+                    return ResponseEntity.status(HttpStatus.OK).body(jwtResponse);
                 }
                 responseMessage.setMessage("Bad Credentials");
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
