@@ -21,7 +21,9 @@ import com.mavs.backend.entities.solution.Solution;
 import com.mavs.backend.entities.solution.SolutionBenefits;
 import com.mavs.backend.entities.solution.SolutionCategory;
 import com.mavs.backend.entities.solution.SolutionFeatures;
+import com.mavs.backend.entities.solution.SolutionResponse;
 import com.mavs.backend.helper.JwtUtil;
+import com.mavs.backend.helper.ProductUsedResponse;
 import com.mavs.backend.helper.ResponseMessage;
 import com.mavs.backend.helper.SolCategoryResponse;
 
@@ -243,18 +245,31 @@ public class SolutionService {
     public ResponseEntity<?> getAllSolutions(){
         try {
             List<Solution> solutions = solutionDao.findAll();
-            List<Solution> solutionResponses = new ArrayList<>();
+            List<SolutionResponse> solutionResponses = new ArrayList<>();
             for(int i=0;i<solutions.size();i++){
-                Solution solutionResponse = new Solution();
+                SolutionResponse solutionResponse = new SolutionResponse();
                 solutionResponse.setTitle(solutions.get(i).getTitle());
                 solutionResponse.setDescription(solutions.get(i).getDescription());
                 solutionResponse.setCoverimg(solutions.get(i).getCoverimg());
                 solutionResponse.setSolimg1(solutions.get(i).getSolimg1());
                 solutionResponse.setSolimg2(solutions.get(i).getSolimg2());
                 solutionResponse.setSolimg3(solutions.get(i).getSolimg3());
-                solutionResponse.setProductused(solutions.get(i).getProductused());
                 solutionResponse.setSolutionFeatures(solutions.get(i).getSolutionFeatures());
                 solutionResponse.setSolutionBenefits(solutions.get(i).getSolutionBenefits());
+
+                List<ProductUsedResponse> models = new ArrayList<>();
+                for(int j=0;j<solutions.get(i).getProductused().size();j++){
+                    ProductUsedResponse model = new ProductUsedResponse();
+                    Product product = productDao.findProductBymodelNumber(solutions.get(i).getProductused().get(j));
+
+                    model.setModelNum(product.getModelNumber());
+                    model.setProductName(product.getProductName());
+                    model.setProductImage(product.getProductImage1());
+                    models.add(model);
+                }
+                solutionResponse.setProductused(models);
+                
+
 
                 solutionResponses.add(solutionResponse);
 
