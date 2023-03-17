@@ -254,6 +254,7 @@ public class SolutionService {
                 solutionResponse.setSolimg1(solutions.get(i).getSolimg1());
                 solutionResponse.setSolimg2(solutions.get(i).getSolimg2());
                 solutionResponse.setSolimg3(solutions.get(i).getSolimg3());
+                solutionResponse.setSolcategory(solutions.get(i).getSolcategory());
                 solutionResponse.setSolutionFeatures(solutions.get(i).getSolutionFeatures());
                 solutionResponse.setSolutionBenefits(solutions.get(i).getSolutionBenefits());
 
@@ -286,7 +287,27 @@ public class SolutionService {
     public ResponseEntity<?> getSolutionById(String title){
         try {
             Solution solution = solutionDao.findSolutionByTitle(title);
-            return ResponseEntity.status(HttpStatus.OK).body(solution);
+            SolutionResponse solutionResponse = new SolutionResponse();
+            solutionResponse.setTitle(solution.getTitle());
+            solutionResponse.setDescription(solution.getDescription());
+            solutionResponse.setCoverimg(solution.getCoverimg());
+            solutionResponse.setSolimg1(solution.getSolimg1());
+            solutionResponse.setSolimg2(solution.getSolimg2());
+            solutionResponse.setSolimg3(solution.getSolimg3());
+            solutionResponse.setSolcategory(solution.getSolcategory());
+            solutionResponse.setSolutionFeatures(solution.getSolutionFeatures());
+            solutionResponse.setSolutionBenefits(solution.getSolutionBenefits());
+            List<ProductUsedResponse> productUsedResponses = new ArrayList<>();
+            for(int i=0;i<solution.getProductused().size();i++){
+                ProductUsedResponse productUsedResponse = new ProductUsedResponse();
+                Product product = productDao.findProductBymodelNumber(solution.getProductused().get(i));
+                productUsedResponse.setModelNum(product.getModelNumber());
+                productUsedResponse.setProductName(product.getProductName());
+                productUsedResponse.setProductImage(product.getProductImage1());
+                productUsedResponses.add(productUsedResponse);
+            }
+            solutionResponse.setProductused(productUsedResponses);
+            return ResponseEntity.status(HttpStatus.OK).body(solutionResponse);
         } catch (Exception e) {
             // TODO: handle exception
             e.printStackTrace();
