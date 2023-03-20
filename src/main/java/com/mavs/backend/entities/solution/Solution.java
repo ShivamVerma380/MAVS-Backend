@@ -30,14 +30,14 @@ public class Solution {
 
     private String solimg3;
 
-    private List<String> productused;
+    private String[] productused;
 
     public Solution() {
     }
 
     public Solution(String title, String description, String coverimg,String solcategory, ArrayList<SolutionFeatures> solutionFeatures,
             ArrayList<SolutionBenefits> solutionBenefits, String solimg1, String solimg2, String solimg3,
-            List<String> productused) {
+            String[] productused) {
         this.title = title;
         this.description = description;
         this.coverimg = coverimg;
@@ -114,11 +114,11 @@ public class Solution {
         this.solimg3 = solimg3;
     }
 
-    public List<String> getProductused() {
+    public String[] getProductused() {
         return productused;
     }
 
-    public void setProductused(List<String> productused) {
+    public void setProductused(String[] productused) {
         this.productused = productused;
     }
 

@@ -631,7 +631,8 @@ public class ExcelHelper{
                                         e.printStackTrace();
                                     }
                                 }
-                                solution.setProductused(new ArrayList<>(hashSet));
+                                String[] strArray = new String[hashSet.size()];
+                                solution.setProductused(hashSet.toArray(strArray));
 
                             } catch (Exception e) {
                                 // e.printStackTrace();

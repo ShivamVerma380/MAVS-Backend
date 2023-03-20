@@ -52,7 +52,7 @@ public class SolutionService {
     public SolutionCategoryDao solutionCategoryDao;
 
     // first upload solutions then categories
-    public ResponseEntity<?> addSolution(String title,String description,String coverimg,String solcategory,String solimg1,String solimg2,String solimg3,List<String> productsused,String authorization){
+    public ResponseEntity<?> addSolution(String title,String description,String coverimg,String solcategory,String solimg1,String solimg2,String solimg3,String[] productsused,String authorization){
         try {
             String token = authorization.substring(7);
             String email = jwtUtil.extractUsername(token);
@@ -71,18 +71,19 @@ public class SolutionService {
             solution.setSolimg2(solimg2);
             solution.setSolimg3(solimg3);
             HashSet<String> hashSet = new HashSet<>();
-            for(int i=0;i<productsused.size();i++){
+            for(int i=0;i<productsused.length;i++){
                 try {
-                    Product product = productDao.findProductBymodelNumber(productsused.get(i));
+                    Product product = productDao.findProductBymodelNumber(productsused[i]);
                     if(product!=null){
-                        hashSet.add(productsused.get(i));
+                        hashSet.add(productsused[i]);
                     }
                 } catch (Exception e) {
                     // TODO: handle exception
                     e.printStackTrace();
                 }
             }
-            solution.setProductused(new ArrayList<>(hashSet));
+            String[] strArray = new String[hashSet.size()];
+            solution.setProductused(hashSet.toArray(strArray));
             solutionDao.save(solution);
 
             List<SolutionCategory> solutionCategories = solutionCategoryDao.findAll();
@@ -259,9 +260,9 @@ public class SolutionService {
                 solutionResponse.setSolutionBenefits(solutions.get(i).getSolutionBenefits());
 
                 List<ProductUsedResponse> models = new ArrayList<>();
-                for(int j=0;j<solutions.get(i).getProductused().size();j++){
+                for(int j=0;j<solutions.get(i).getProductused().length;j++){
                     ProductUsedResponse model = new ProductUsedResponse();
-                    Product product = productDao.findProductBymodelNumber(solutions.get(i).getProductused().get(j));
+                    Product product = productDao.findProductBymodelNumber(solutions.get(i).getProductused()[j]);
 
                     model.setModelNum(product.getModelNumber());
                     model.setProductName(product.getProductName());
@@ -298,9 +299,9 @@ public class SolutionService {
             solutionResponse.setSolutionFeatures(solution.getSolutionFeatures());
             solutionResponse.setSolutionBenefits(solution.getSolutionBenefits());
             List<ProductUsedResponse> productUsedResponses = new ArrayList<>();
-            for(int i=0;i<solution.getProductused().size();i++){
+            for(int i=0;i<solution.getProductused().length;i++){
                 ProductUsedResponse productUsedResponse = new ProductUsedResponse();
-                Product product = productDao.findProductBymodelNumber(solution.getProductused().get(i));
+                Product product = productDao.findProductBymodelNumber(solution.getProductused()[i]);
                 productUsedResponse.setModelNum(product.getModelNumber());
                 productUsedResponse.setProductName(product.getProductName());
                 productUsedResponse.setProductImage(product.getProductImage1());
