@@ -52,7 +52,7 @@ public class SolutionService {
     public SolutionCategoryDao solutionCategoryDao;
 
     // first upload solutions then categories
-    public ResponseEntity<?> addSolution(String title,String description,String coverimg,String solcategory,String solimg1,String solimg2,String solimg3,String[] productsused,String authorization){
+    public ResponseEntity<?> addSolution(String title,String description,String coverimg,String solcategory,String solimg1,String solimg2,String solimg3,String productsused,String authorization){
         try {
             String token = authorization.substring(7);
             String email = jwtUtil.extractUsername(token);
@@ -61,6 +61,8 @@ public class SolutionService {
                 responseMessage.setMessage("Only admins can add product");
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
             }
+
+            String[] productsusedfinal = productsused.split(";");
 
             Solution solution = new Solution();
             solution.setTitle(title);
@@ -71,11 +73,11 @@ public class SolutionService {
             solution.setSolimg2(solimg2);
             solution.setSolimg3(solimg3);
             HashSet<String> hashSet = new HashSet<>();
-            for(int i=0;i<productsused.length;i++){
+            for(int i=0;i<productsusedfinal.length;i++){
                 try {
-                    Product product = productDao.findProductBymodelNumber(productsused[i]);
+                    Product product = productDao.findProductBymodelNumber(productsusedfinal[i]);
                     if(product!=null){
-                        hashSet.add(productsused[i]);
+                        hashSet.add(productsusedfinal[i]);
                     }
                 } catch (Exception e) {
                     // TODO: handle exception
