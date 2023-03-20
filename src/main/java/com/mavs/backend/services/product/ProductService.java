@@ -378,7 +378,7 @@ public class ProductService {
         }
     }
 
-    public ResponseEntity<?> addProductCategory(String authorization,String productcategory,List<String> modelNum){
+    public ResponseEntity<?> addProductCategory(String authorization,String productcategory,String modelNum){
         try {
             String token = authorization.substring(7);
             String email = jwtUtil.extractUsername(token);
@@ -387,12 +387,13 @@ public class ProductService {
                 responseMessage.setMessage("Only admin can add product category");
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
             }
+            String[] modelNumFinal = modelNum.split(";");
             HashSet<String> models = new HashSet<>();
-            for(int i=0;i<modelNum.size();i++){
+            for(int i=0;i<modelNumFinal.length;i++){
                 try {
-                    Product product = productDao.findProductBymodelNumber(modelNum.get(i));
+                    Product product = productDao.findProductBymodelNumber(modelNumFinal[i]);
                     if(product!=null){
-                        models.add(modelNum.get(i));
+                        models.add(modelNumFinal[i]);
                     }
                 } catch (Exception e) {
                     // TODO: handle exception

@@ -63,6 +63,8 @@ public class SolutionService {
             }
 
             String[] productsusedfinal = productsused.split(";");
+            System.out.println(productsusedfinal);
+            
 
             Solution solution = new Solution();
             solution.setTitle(title);
