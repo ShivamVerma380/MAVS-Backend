@@ -135,7 +135,7 @@ public class ProductController {
     }
 
     @PostMapping("/productcategory")
-    public ResponseEntity<?> addProductCategory(@RequestHeader("Authorization") String authorization,@RequestParam("productcategory") String productcategory,@RequestParam("modelNum") List<String> modelNum){
+    public ResponseEntity<?> addProductCategory(@RequestHeader("Authorization") String authorization,@RequestParam("productcategory") String productcategory,@RequestParam("modelNum") String modelNum){
         try {
             return productService.addProductCategory(authorization, productcategory, modelNum);
         } catch (Exception e) {
