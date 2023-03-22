@@ -12,10 +12,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.mavs.backend.daos.admin.AdminDao;
+import com.mavs.backend.daos.home.HomeDao;
 import com.mavs.backend.daos.product.ProductDao;
 import com.mavs.backend.daos.solution.SolutionCategoryDao;
 import com.mavs.backend.daos.solution.SolutionDao;
 import com.mavs.backend.entities.admin.Admin;
+import com.mavs.backend.entities.home.Home;
+import com.mavs.backend.entities.home.SubLink;
 import com.mavs.backend.entities.product.Product;
 import com.mavs.backend.entities.solution.Solution;
 import com.mavs.backend.entities.solution.SolutionBenefits;
@@ -51,6 +54,9 @@ public class SolutionService {
     @Autowired
     public SolutionCategoryDao solutionCategoryDao;
 
+    @Autowired
+    public HomeDao homeDao;
+
     // first upload solutions then categories
     public ResponseEntity<?> addSolution(String title,String description,String coverimg,String solcategory,String solimg1,String solimg2,String solimg3,String productsused,String authorization){
         try {
@@ -64,7 +70,7 @@ public class SolutionService {
 
             String[] productsusedfinal = productsused.split(";");
             System.out.println(productsusedfinal);
-            
+
 
             Solution solution = new Solution();
             solution.setTitle(title);
@@ -98,7 +104,7 @@ public class SolutionService {
                         solutionCategoryDao.save(solutionCategories.get(i));
                     }
                 }
-            }
+            } 
 
 
             responseMessage.setMessage("Solution saved successfully");
@@ -338,17 +344,18 @@ public class SolutionService {
             solutionCategoryDao.save(solution);
 
             List<Solution> sol = solutionDao.findAll();
-            ArrayList<Solution> new_sol = new ArrayList<>();
+            HashSet<Solution> new_sol = new HashSet<>();
             System.out.println("outside");
             for(int i=0;i<sol.size();i++){
                 System.out.println(sol.get(i).getSolcategory());
                 System.out.println(category);
+                
                 if(sol.get(i).getSolcategory().equals(category)){
                     System.out.println("inside"+i);
                     new_sol.add(sol.get(i));
                 }
             }
-            solution.setSolutions(new_sol);
+            solution.setSolutions(new ArrayList<>(new_sol));
 
             // List<Solution> sol = solutionDao.findSolutionByCategory(category);
             // solution.setSolutions(sol);

@@ -17,11 +17,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.mavs.backend.daos.admin.AdminDao;
 import com.mavs.backend.daos.product.ProductCategoryDao;
 import com.mavs.backend.daos.product.ProductDao;
+import com.mavs.backend.daos.solution.SolutionDao;
 import com.mavs.backend.entities.admin.Admin;
 import com.mavs.backend.entities.product.AdditionalFeatures;
 import com.mavs.backend.entities.product.Product;
 import com.mavs.backend.entities.product.ProductCategory;
 import com.mavs.backend.entities.product.ProductDescription;
+import com.mavs.backend.entities.solution.Solution;
 import com.mavs.backend.helper.JwtUtil;
 import com.mavs.backend.helper.ProductCategoryModelsResponse;
 import com.mavs.backend.helper.ProductCategoryResponse;
@@ -50,6 +52,9 @@ public class ProductService {
 
     @Autowired
     public ProductCategoryDao productCategoryDao;
+
+    @Autowired
+    public SolutionDao solutionDao;
     
     public ResponseEntity<?> addProductDetail( String modelNumber,String productName, String productHighlights,
             String productPrice, String productImage1, String productImage2, String productImage3,String videoLink,String productCategory,String authorization, String brochureLink) {
