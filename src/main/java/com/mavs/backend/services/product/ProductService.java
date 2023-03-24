@@ -23,6 +23,8 @@ import com.mavs.backend.entities.product.AdditionalFeatures;
 import com.mavs.backend.entities.product.Product;
 import com.mavs.backend.entities.product.ProductCategory;
 import com.mavs.backend.entities.product.ProductDescription;
+import com.mavs.backend.entities.product.ProductSpecifications;
+import com.mavs.backend.entities.product.SpecificationDetails;
 import com.mavs.backend.entities.solution.Solution;
 import com.mavs.backend.helper.JwtUtil;
 import com.mavs.backend.helper.ProductCategoryModelsResponse;
@@ -342,6 +344,61 @@ public class ProductService {
             responseMessage.setMessage(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
         }
+    }
+
+    public ResponseEntity<?> addProductSpecs(String authorization, String modelNumber, String headTitle,String key, String value){
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            admin = adminDao.findAdminByEmail(email);
+            if (admin == null) {
+                responseMessage.setMessage("Only admin can add product specifications");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+            String[] keyarr = key.split(";");
+            String[] valuearr = value.split(";");
+            List<SpecificationDetails> specificationDetailspre = new ArrayList<>();
+            for(int i=0;i<keyarr.length;i++){
+                SpecificationDetails specificationDetailpre = new SpecificationDetails();
+                specificationDetailpre.setKey(keyarr[i]);
+                specificationDetailpre.setValue(valuearr[i]);
+                specificationDetailspre.add(specificationDetailpre);
+
+            }
+            Product existingProduct = productDao.findProductBymodelNumber(modelNumber);
+
+            if (existingProduct == null) {
+                responseMessage.setMessage("Product Not Found!!");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+            Product product = productDao.findProductBymodelNumber(modelNumber);
+            List<ProductSpecifications> productSpecificationList = new ArrayList<>();
+            ProductSpecifications productSpecifications = new ProductSpecifications();
+            productSpecifications.setHead(headTitle);
+            productSpecifications.setSpecs(specificationDetailspre);
+            
+            
+            
+
+            
+
+            productSpecificationList.add(productSpecifications);
+
+            product.setSpecifications(productSpecificationList);
+
+            productDao.save(product);
+
+
+
+            responseMessage.setMessage("Product Specifications Saved Successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+
     }
 
     public ResponseEntity<?> addProductSpecifications(String authorization,String modelNumber,HashMap<String,HashMap<String,String>> productSpecs){

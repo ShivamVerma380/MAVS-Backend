@@ -2,6 +2,7 @@ package com.mavs.backend.entities.product;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -37,6 +38,8 @@ public class Product {
 
         private HashMap<String,HashMap<String,String>> productSpecifications;
 
+        private List<ProductSpecifications> specifications;
+
         private ArrayList<String> imgsrc;
 
         private String index;
@@ -48,12 +51,14 @@ public class Product {
         public Product() {
         }
 
-        
 
         public Product(String modelNumber, String productId, String productName, String productHighlights,
                 String productImage1, String productImage2, String productImage3, String productPrice,
                 String productVideoLink, String productCategory, ArrayList<ProductDescription> productDescriptions,
-                ArrayList<AdditionalFeatures> additionalFeatures,HashMap<String, HashMap<String, String>> productSpecifications, ArrayList<String> imgsrc,String index, String brochureLink) {
+                ArrayList<AdditionalFeatures> additionalFeatures,
+                HashMap<String, HashMap<String, String>> productSpecifications,
+                List<ProductSpecifications> specifications, ArrayList<String> imgsrc, String index,
+                String brochureLink) {
             this.modelNumber = modelNumber;
             this.productId = productId;
             this.productName = productName;
@@ -66,11 +71,16 @@ public class Product {
             this.productCategory = productCategory;
             this.productDescriptions = productDescriptions;
             this.additionalFeatures = additionalFeatures;
+            this.productSpecifications = productSpecifications;
+            this.specifications = specifications;
             this.imgsrc = imgsrc;
             this.index = index;
-            this.productSpecifications = productSpecifications;
             this.brochureLink = brochureLink;
         }
+
+
+
+
 
 
 
@@ -225,6 +235,19 @@ public class Product {
 
 
 
+        
+
+
+        public List<ProductSpecifications> getSpecifications() {
+            return specifications;
+        }
+
+
+        public void setSpecifications(List<ProductSpecifications> specifications) {
+            this.specifications = specifications;
+        }
+
+
         @Override
         public String toString() {
             return "Product [modelNumber=" + modelNumber + ", productId=" + productId + ", productName=" + productName
@@ -232,12 +255,12 @@ public class Product {
                     + ", productImage2=" + productImage2 + ", productImage3=" + productImage3 + ", productPrice="
                     + productPrice + ", productVideoLink=" + productVideoLink + ", productCategory=" + productCategory
                     + ", productDescriptions=" + productDescriptions + ", additionalFeatures=" + additionalFeatures
-                    + ", productSpecifications=" + productSpecifications + ", imgsrc=" + imgsrc + ", index=" + index
-                    + ", brochureLink=" + brochureLink + "]";
+                    + ", productSpecifications=" + productSpecifications + ", specifications=" + specifications
+                    + ", imgsrc=" + imgsrc + ", index=" + index + ", brochureLink=" + brochureLink + "]";
         }
 
         
-
+        
         
        
 }
