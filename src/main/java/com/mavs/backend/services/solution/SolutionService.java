@@ -222,6 +222,16 @@ public class SolutionService {
             if(solutionCategories!=null){
                 solutionCategoryDao.deleteAll();
             }
+
+            List<Home> homes = homeDao.findAll();
+            for(int i=0;i<homes.size();i++){
+                if(homes.get(i).getSubmenu().equals("true")){
+                    for(int j=0;j<homes.get(i).getSublinks().size();j++){
+                        homes.get(i).getSublinks().clear();
+                    }
+                }
+                homeDao.save(homes.get(i));
+            }
             responseMessage.setMessage("all solutions deleted successfully");
             return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
         } catch (Exception e) {
