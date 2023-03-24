@@ -475,6 +475,21 @@ public class SolutionService {
                 solutionCategoryDao.deleteAll();
             }
 
+            List<Solution> solutions = solutionDao.findAll();
+            if(solutions!=null){
+                solutionDao.deleteAll();
+            }
+
+            List<Home> homes = homeDao.findAll();
+            for(int i=0;i<homes.size();i++){
+                if(homes.get(i).getSubmenu().equals("true")){
+                    for(int j=0;j<homes.get(i).getSublinks().size();j++){
+                        homes.get(i).getSublinks().clear();
+                    }
+                }
+                homeDao.save(homes.get(i));
+            }
+
             responseMessage.setMessage("solution categories deleted successfully");
             return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
         } catch (Exception e) {
@@ -495,8 +510,30 @@ public class SolutionService {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
             }
             SolutionCategory solutionCategory = solutionCategoryDao.findSolutionCategoryByCategory(category);
+           
             if(solutionCategory!=null){
                 solutionCategoryDao.delete(solutionCategory);
+            }
+
+            List<Solution> solutions = solutionDao.findAll();
+            for(int i=0;i<solutions.size();i++){
+                if(solutions.get(i).getSolcategory().equals(category)){
+                    solutions.remove(i);
+                }
+            }
+
+            
+
+            List<Home> homes = homeDao.findAll();
+            for(int i=0;i<homes.size();i++){
+                if(homes.get(i).getSubmenu().equals("true")){
+                    for(int j=0;j<homes.get(i).getSublinks().size();j++){
+                        if(homes.get(i).getSublinks().get(j).getHead().equals(category)){
+                            homes.get(i).getSublinks().remove(j);
+                        }
+                    }
+                }
+                homeDao.save(homes.get(i));
             }
 
             responseMessage.setMessage("solution category deleted successfully");
