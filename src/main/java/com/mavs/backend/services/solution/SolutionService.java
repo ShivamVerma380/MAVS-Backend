@@ -259,6 +259,22 @@ public class SolutionService {
                 }
             }
 
+            List<Home> homes = homeDao.findAll();
+            for(int i=0;i<homes.size();i++){
+                if(homes.get(i).getSubmenu().equals("true")){
+                    for(int j=0;j<homes.get(i).getSublinks().size();j++){
+                        if(homes.get(i).getSublinks().get(j).getHead().equals(solution.getSolcategory())){
+                            for(int k=0;k<homes.get(i).getSublinks().get(j).getSublink().size();k++){
+                                if(homes.get(i).getSublinks().get(j).getSublink().get(k).equals(title)){
+                                    homes.get(i).getSublinks().get(j).getSublink().remove(k);
+                                }
+                            }
+                        }
+                    }
+                }
+                homeDao.save(homes.get(i));
+            }
+
             responseMessage.setMessage(" solution deleted successfully");
             return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
         } catch (Exception e) {
