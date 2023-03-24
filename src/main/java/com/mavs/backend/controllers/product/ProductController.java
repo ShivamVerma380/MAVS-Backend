@@ -135,9 +135,9 @@ public class ProductController {
     }
 
     @PostMapping("/productspecs/{modelNumber}")
-    public ResponseEntity<?> addProductSpecs(@RequestHeader("Authorization") String authorization,@PathVariable("modelNumber") String modelNumber,@RequestParam("headTitle") String headTitle, @RequestParam("key") String key,@RequestParam("value") String value){
+    public ResponseEntity<?> addProductSpecs(@RequestHeader("Authorization") String authorization,@PathVariable("modelNumber") String modelNumber,@RequestParam("head") String head, @RequestParam("key") String key,@RequestParam("value") String value){
         try {
-            return productService.addProductSpecs(authorization,modelNumber,headTitle,key,value);
+            return productService.addProductSpecs(authorization,modelNumber,head,key,value);
         } catch (Exception e) {
             // TODO: handle exception
             e.printStackTrace();
