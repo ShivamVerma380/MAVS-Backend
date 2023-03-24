@@ -355,6 +355,14 @@ public class ProductService {
                 responseMessage.setMessage("Only admin can add product specifications");
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
             }
+            Product existingProduct = productDao.findProductBymodelNumber(modelNumber);
+
+            if (existingProduct == null) {
+                responseMessage.setMessage("Product Not Found!!");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+
+
             String[] keyarr = key.split(";");
             String[] valuearr = value.split(";");
             List<SpecificationDetails> specificationDetailspre = new ArrayList<>();
@@ -365,14 +373,14 @@ public class ProductService {
                 specificationDetailspre.add(specificationDetailpre);
 
             }
-            Product existingProduct = productDao.findProductBymodelNumber(modelNumber);
-
-            if (existingProduct == null) {
-                responseMessage.setMessage("Product Not Found!!");
-                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
-            }
+            
             Product product = productDao.findProductBymodelNumber(modelNumber);
-            List<ProductSpecifications> productSpecificationList = new ArrayList<>();
+            // if(product.getSpecifications()==null){
+            //     List<ProductSpecifications> productSpecificationsList = new ArrayList<>();
+            // }else{
+                
+            // }
+            List<ProductSpecifications> productSpecificationList = product.getSpecifications();
             ProductSpecifications productSpecifications = new ProductSpecifications();
             productSpecifications.setHead(headTitle);
             productSpecifications.setSpecs(specificationDetailspre);
