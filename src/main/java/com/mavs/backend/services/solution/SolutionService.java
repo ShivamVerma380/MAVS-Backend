@@ -106,6 +106,22 @@ public class SolutionService {
                 }
             } 
 
+            List<Home> homes = homeDao.findAll();
+            for(int i=0;i<homes.size();i++){
+                if(homes.get(i).getSubmenu().equals("true")){
+                    //solution ka title addd karna hai list<string> sublink mein sublink class ke andar
+                    for(int j=0;j<homes.get(i).getSublinks().size();j++){
+                        if(homes.get(i).getSublinks().get(j).getHead().equals(solcategory)){
+                            List<String> sublinks = homes.get(i).getSublinks().get(j).getSublink();
+                            sublinks.add(title);
+                            homes.get(i).getSublinks().get(j).setSublink(sublinks);
+                        }
+                    }
+                }
+                homeDao.save(homes.get(i));
+                
+            }
+
 
             responseMessage.setMessage("Solution saved successfully");
             return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
@@ -337,6 +353,20 @@ public class SolutionService {
                 responseMessage.setMessage("Only admins can add solution features");
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
             }
+            // List<SolutionCategory> solutionCategories = solutionCategoryDao.findAll();
+            // if(solutionCategories.isEmpty()){}
+            // for(int i=0;i<solutionCategories.size();i++){
+            //     List<Solution> existingSolutions = solutionCategories.get(i).getSolutions();
+            //     List<Solution> solutions = solutionDao.findAll();
+            //     for(int j=0;j<existingSolutions.size();j++){
+            //         for(int k=0;j<solutions.size();k++){
+            //             if(existingSolutions.get(j).getTitle().equals(solutions.get(k).getTitle())){
+
+            //             }
+            //         }
+            //     }
+            // }
+
             SolutionCategory solution = new SolutionCategory();
             solution.setCategory(category);
             solution.setCatimg(catimg);
@@ -344,6 +374,7 @@ public class SolutionService {
             solutionCategoryDao.save(solution);
 
             List<Solution> sol = solutionDao.findAll();
+            List<SolutionCategory> solutionCategories = solutionCategoryDao.findAll();
             HashSet<Solution> new_sol = new HashSet<>();
             System.out.println("outside");
             for(int i=0;i<sol.size();i++){
@@ -353,6 +384,7 @@ public class SolutionService {
                 if(sol.get(i).getSolcategory().equals(category)){
                     System.out.println("inside"+i);
                     new_sol.add(sol.get(i));
+
                 }
             }
             solution.setSolutions(new ArrayList<>(new_sol));
