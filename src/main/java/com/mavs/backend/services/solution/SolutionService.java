@@ -392,6 +392,32 @@ public class SolutionService {
             // List<Solution> sol = solutionDao.findSolutionByCategory(category);
             // solution.setSolutions(sol);
 
+            List<Home> homes = homeDao.findAll();
+            boolean flag = false;
+            for(int i=0;i<homes.size();i++){
+                if(homes.get(i).getSubmenu().equals("true")){
+                    for(int j=0;j<homes.get(i).getSublinks().size();j++){
+                        if(homes.get(i).getSublinks().get(j).getHead().equals(category)){
+                            flag = true;
+                            break;
+                        }
+                        else{
+                            flag = false;
+                            
+                        }
+                    }
+                    if(!flag){
+                           SubLink sublink = new SubLink();
+                           sublink.setHead(category);
+                           
+                           List<SubLink> categories = homes.get(i).getSublinks();
+                           categories.add(sublink);
+                       
+                    }
+                }
+                homeDao.save(homes.get(i));
+            }
+
             solutionCategoryDao.save(solution);
 
             responseMessage.setMessage("category added successfully");
