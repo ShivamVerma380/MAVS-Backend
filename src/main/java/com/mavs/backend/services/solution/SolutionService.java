@@ -260,10 +260,11 @@ public class SolutionService {
             }
 
             List<Home> homes = homeDao.findAll();
+            Solution solutionhome = solutionDao.findSolutionByTitle(title);
             for(int i=0;i<homes.size();i++){
                 if(homes.get(i).getSubmenu().equals("true")){
                     for(int j=0;j<homes.get(i).getSublinks().size();j++){
-                        if(homes.get(i).getSublinks().get(j).getHead().equals(solution.getSolcategory())){
+                        if(homes.get(i).getSublinks().get(j).getHead().equals(solutionhome.getSolcategory())){
                             for(int k=0;k<homes.get(i).getSublinks().get(j).getSublink().size();k++){
                                 if(homes.get(i).getSublinks().get(j).getSublink().get(k).equals(title)){
                                     homes.get(i).getSublinks().get(j).getSublink().remove(k);
