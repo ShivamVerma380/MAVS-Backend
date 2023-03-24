@@ -407,9 +407,10 @@ public class SolutionService {
                         }
                     }
                     if(!flag){
+                            List<String> sublinks = new ArrayList<>();
                            SubLink sublink = new SubLink();
                            sublink.setHead(category);
-                           
+                           sublink.setSublink(sublinks);
                            List<SubLink> categories = homes.get(i).getSublinks();
                            categories.add(sublink);
                        
