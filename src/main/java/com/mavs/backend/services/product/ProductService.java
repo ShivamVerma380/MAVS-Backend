@@ -381,6 +381,9 @@ public class ProductService {
                 
             // }
             List<ProductSpecifications> productSpecificationList = product.getSpecifications();
+            if(productSpecificationList==null){
+                productSpecificationList = new ArrayList<>();
+            }
             ProductSpecifications productSpecifications = new ProductSpecifications();
             productSpecifications.setHead(headTitle);
             productSpecifications.setSpecs(specificationDetailspre);
