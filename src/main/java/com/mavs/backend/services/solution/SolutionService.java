@@ -122,6 +122,33 @@ public class SolutionService {
                 
             }
 
+            // List<SolutionCategory> solutionCategories2 = solutionCategoryDao.findAll();
+            // boolean flag = false;
+            // Solution sol = new Solution();
+            // for(int i=0;i<solutionCategories2.size();i++){
+            //     if(solutionCategories2.get(i).getCategory().equals(solcategory)){
+            //         for(int j=0;j<solutionCategories2.get(i).getSolutions().size();j++){
+            //             if(solutionCategories2.get(i).getSolutions().get(j).getTitle().equals(title)){
+            //                 flag=true;
+            //                 sol = solutionCategories2.get(i).getSolutions().get(j);
+            //                 break;
+            //             }else{
+            //                 flag = false;
+            //             }
+            //         }
+            //         if(!flag){
+            //             solutionCategories2.get(i).getSolutions().add(solution);
+            //             solutionCategoryDao.save(solutionCategories2.get(i));
+            //         }
+            //         else{
+            //             solutionCategories2.get(i).getSolutions().remove(sol);
+            //             solutionCategories2.get(i).getSolutions().add(solution);
+            //             solutionCategoryDao.save(solutionCategories2.get(i));
+            //         }
+                    
+            //     }
+            // }
+
 
             responseMessage.setMessage("Solution saved successfully");
             return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
