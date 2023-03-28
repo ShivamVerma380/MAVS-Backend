@@ -189,12 +189,28 @@ public class SolutionService {
                 responseMessage.setMessage("Solution Not found for which you are adding features");
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
             }
+
+            int index = 0;
+            boolean flag = false;
             ArrayList<SolutionFeatures> list = solution.getSolutionFeatures();
             if(list==null){
                 list = new ArrayList<>();
+            }else{
+                for(int i=0;i<list.size();i++){
+                    if(list.get(i).getName().equals(name)){
+                        list.remove(i);
+                        flag = true;
+                        index = i;
+                    }
+                }
             }
             SolutionFeatures solutionFeatures = new SolutionFeatures(name, description, icon);
-            list.add(solutionFeatures);
+            if(flag){
+                list.add(index,solutionFeatures);
+            }else{
+                list.add(solutionFeatures);
+            }
+            
             solution.setSolutionFeatures(list);
             solutionDao.save(solution);
 
