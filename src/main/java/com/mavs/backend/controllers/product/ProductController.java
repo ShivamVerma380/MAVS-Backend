@@ -170,6 +170,18 @@ public class ProductController {
         }
     }
 
+    @DeleteMapping("/deleteProductSpecs/{modelNumber}/{head}")
+    public ResponseEntity<?> deleteProductSpecs(@RequestHeader("Authorization") String authorization,@PathVariable("modelNumber") String modelNumber,@PathVariable("head") String head){
+        try {
+            return productService.deleteProductSpecs(authorization,modelNumber,head);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
     @PostMapping("/productcategory")
     public ResponseEntity<?> addProductCategory(@RequestHeader("Authorization") String authorization,@RequestParam("productcategory") String productcategory,@RequestParam("modelNum") String modelNum){
         try {
