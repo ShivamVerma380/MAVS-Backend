@@ -355,12 +355,27 @@ public class ProductService {
                 responseMessage.setMessage("Product Not found");
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
             }
+            int index = 0;
+            boolean flag = false;
             ArrayList<AdditionalFeatures> list = product.getAdditionalFeatures();
             if(list==null){
                 list = new ArrayList<>();
+            }else{
+                for(int i=0;i<list.size();i++){
+                    if(list.get(i).getTitle().equals(title)){
+                        list.remove(i);
+                        flag = true;
+                        index = i;
+                    }
+                }
             }
             AdditionalFeatures additionalFeatures = new AdditionalFeatures(title,description);
-            list.add(additionalFeatures);
+            if(flag){
+                list.add(index,additionalFeatures);
+            }else{
+                list.add(additionalFeatures);
+            }
+            
             product.setAdditionalFeatures(list);
             productDao.save(product);
             responseMessage.setMessage("Product Details updated Successfully");
