@@ -224,6 +224,34 @@ public class SolutionService {
         }
     }
 
+    public ResponseEntity<?> deleteSolutionFeatures(String authorization,String solutiontitle,String featurename){
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            admin = adminDao.findAdminByEmail(email);
+            if(admin==null){
+                responseMessage.setMessage("Only admins can add solution features");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+            }
+
+            Solution solution = solutionDao.findSolutionByTitle(solutiontitle);
+            for(int i=0;i<solution.getSolutionFeatures().size();i++){
+                if(solution.getSolutionFeatures().get(i).getName().equals(featurename)){
+                    solution.getSolutionFeatures().remove(i);
+                }
+            }
+            solutionDao.save(solution);
+
+            responseMessage.setMessage("Feature deleted successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
     public ResponseEntity<?> addSolutionBenefits(String name,String description,String icon,String title,String authorization){
         try {
             String token = authorization.substring(7);
