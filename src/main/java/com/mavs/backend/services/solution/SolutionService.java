@@ -113,6 +113,12 @@ public class SolutionService {
                     for(int j=0;j<homes.get(i).getSublinks().size();j++){
                         if(homes.get(i).getSublinks().get(j).getHead().equals(solcategory)){
                             List<String> sublinks = homes.get(i).getSublinks().get(j).getSublink();
+                            for(int k=0;k<sublinks.size();k++){
+                                if(sublinks.get(k).equals(title)){
+                                    sublinks.remove(title);
+                                    
+                                }
+                            }
                             sublinks.add(title);
                             homes.get(i).getSublinks().get(j).setSublink(sublinks);
                         }
