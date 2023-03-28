@@ -230,7 +230,7 @@ public class SolutionService {
             String email = jwtUtil.extractUsername(token);
             admin = adminDao.findAdminByEmail(email);
             if(admin==null){
-                responseMessage.setMessage("Only admins can add solution features");
+                responseMessage.setMessage("Only admins can delete solution features");
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
             }
 
@@ -293,6 +293,34 @@ public class SolutionService {
             solutionDao.save(solution);
 
             responseMessage.setMessage("Solution Details updated Successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
+    public ResponseEntity<?> deleteSolutionBenefit(String authorization, String solutiontitle, String benefitname){
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            admin = adminDao.findAdminByEmail(email);
+            if(admin==null){
+                responseMessage.setMessage("Only admins can delete solution benefits");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+            }
+
+            Solution solution = solutionDao.findSolutionByTitle(solutiontitle);
+            for(int i=0;i<solution.getSolutionBenefits().size();i++){
+                if(solution.getSolutionBenefits().get(i).getName().equals(benefitname)){
+                    solution.getSolutionBenefits().remove(i);
+                }
+            }
+            solutionDao.save(solution);
+
+            responseMessage.setMessage("Benefit deleted successfully");
             return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
         } catch (Exception e) {
             // TODO: handle exception

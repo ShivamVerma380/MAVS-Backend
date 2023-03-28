@@ -84,6 +84,18 @@ public class SolutionController {
         }
     }
 
+    @DeleteMapping("/deletesolutionbenefit/{solutiontitle}/{benefitname}")
+    public ResponseEntity<?> deleteSolutionBenefits(@RequestHeader("Authorization") String authorization,@PathVariable("solutiontitle") String solutiontitle,@PathVariable("benefitname") String benefitname){
+        try {
+            return solutionService.deleteSolutionBenefit(authorization, solutiontitle, benefitname);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
     @PostMapping("/solutionbenefits/{title}")
     public ResponseEntity<?> addSolutionBenefits(@RequestHeader("Authorization") String authorization,@PathVariable("title") String title,@RequestParam("name") String name,@RequestParam("description") String description,@RequestParam("icon") String icon){
         try {
