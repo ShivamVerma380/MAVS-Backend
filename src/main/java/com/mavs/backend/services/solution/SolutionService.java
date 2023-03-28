@@ -239,12 +239,28 @@ public class SolutionService {
                 responseMessage.setMessage("Solution Not found for which you are adding benefits");
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
             }
+
+            int index = 0;
+            boolean flag = false;
             ArrayList<SolutionBenefits> list = solution.getSolutionBenefits();
             if(list==null){
                 list = new ArrayList<>();
+            }else{
+                for(int i=0;i<list.size();i++){
+                    if(list.get(i).getName().equals(name)){
+                        list.remove(i);
+                        flag = true;
+                        index = i;
+                    }
+                }
             }
             SolutionBenefits solutionBenefits = new SolutionBenefits(name, icon, description);
-            list.add(solutionBenefits);
+            if(flag){
+                list.add(index,solutionBenefits);
+            }else{
+                list.add(solutionBenefits);
+            }
+            
             solution.setSolutionBenefits(list);
             solutionDao.save(solution);
 
