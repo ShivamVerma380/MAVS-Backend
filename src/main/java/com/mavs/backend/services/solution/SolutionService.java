@@ -127,12 +127,16 @@ public class SolutionService {
             Solution sol = new Solution();
             for(int i=0;i<solutionCategories2.size();i++){
                 if(solutionCategories2.get(i).getCategory().equals(solcategory)){
+                    System.out.println("inside first if");
                     for(int j=0;j<solutionCategories2.get(i).getSolutions().size();j++){
                         if(solutionCategories2.get(i).getSolutions().get(j).getTitle().equals(title)){
+                            System.out.println("inside second if");
                             flag=true;
-                            sol = solutionCategories2.get(i).getSolutions().get(j);
+                            solutionCategories2.get(i).getSolutions().remove(j);
+                            // sol = solutionCategories2.get(i).getSolutions().get(j);
                             break;
                         }else{
+                            
                             flag = false;
                         }
                     }
@@ -141,7 +145,8 @@ public class SolutionService {
                         solutionCategoryDao.save(solutionCategories2.get(i));
                     }
                     else{
-                        solutionCategories2.get(i).getSolutions().remove(sol);
+                        System.out.println("inside else");
+                        // solutionCategories2.get(i).getSolutions().remove(sol);
                         solutionCategories2.get(i).getSolutions().add(solution);
                         solutionCategoryDao.save(solutionCategories2.get(i));
                     }
