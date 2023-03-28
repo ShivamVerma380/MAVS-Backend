@@ -116,10 +116,10 @@ public class SolutionService {
                             for(int k=0;k<sublinks.size();k++){
                                 if(sublinks.get(k).equals(title)){
                                     sublinks.remove(title);
-                                    
+
                                 }
                             }
-                            sublinks.add(title);
+                            sublinks.add(0,title);
                             homes.get(i).getSublinks().get(j).setSublink(sublinks);
                         }
                     }
@@ -153,7 +153,7 @@ public class SolutionService {
                     else{
                         System.out.println("inside else");
                         // solutionCategories2.get(i).getSolutions().remove(sol);
-                        solutionCategories2.get(i).getSolutions().add(solution);
+                        solutionCategories2.get(i).getSolutions().add(0,solution);
                         solutionCategoryDao.save(solutionCategories2.get(i));
                     }
                     
