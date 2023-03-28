@@ -424,9 +424,19 @@ public class ProductService {
             // }else{
                 
             // }
+            boolean flag = false;
+            int index = 0;
             List<ProductSpecifications> productSpecificationList = product.getSpecifications();
             if(productSpecificationList==null){
                 productSpecificationList = new ArrayList<>();
+            }else{
+                for(int i=0;i<productSpecificationList.size();i++){
+                    if(productSpecificationList.get(i).getHead().equals(headTitle)){
+                        productSpecificationList.remove(i);
+                        flag = true;
+                        index = i;
+                    }
+                }
             }
             ProductSpecifications productSpecifications = new ProductSpecifications();
             productSpecifications.setHead(headTitle);
@@ -436,8 +446,12 @@ public class ProductService {
             
 
             
-
-            productSpecificationList.add(productSpecifications);
+            if(flag){
+                productSpecificationList.add(index,productSpecifications);
+            }else{
+                productSpecificationList.add(productSpecifications);
+            }
+            
 
             product.setSpecifications(productSpecificationList);
 
