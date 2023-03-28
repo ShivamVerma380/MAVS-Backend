@@ -341,6 +341,34 @@ public class ProductService {
         }
     }
 
+    public ResponseEntity<?> deleteDescription(String authorization,String modelNumber,String title){
+        try {
+            String token = authorization.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            admin = adminDao.findAdminByEmail(email);
+            if(admin==null){
+                responseMessage.setMessage("Only admin can delete description");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseMessage);
+            }
+
+            Product product = productDao.findProductBymodelNumber(modelNumber);
+            for(int i=0;i<product.getProductDescriptions().size();i++){
+                if(product.getProductDescriptions().get(i).getTitle().equals(title)){
+                    product.getProductDescriptions().remove(i);
+                }
+            }
+            productDao.save(product);
+
+            responseMessage.setMessage("product description deleted successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
     public ResponseEntity<?> addAditionalFeatures(String authorization,String title,String description,String modelNumber){
         try {
             String token = authorization.substring(7);

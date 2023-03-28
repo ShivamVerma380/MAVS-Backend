@@ -111,6 +111,18 @@ public class ProductController {
         }
     }
 
+    @DeleteMapping("/deleteDescription/{modelNumber}/{title}")
+    public ResponseEntity<?> deleteDescription(@RequestHeader("Authorization") String authorization,@PathVariable("modelNumber") String modelNumber,@PathVariable("title") String title){
+        try {
+            return productService.deleteDescription(authorization,modelNumber,title);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            responseMessage.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMessage);
+        }
+    }
+
     @PostMapping("/additionalfeatures/{modelNumber}")
     public ResponseEntity<?> addAdditionalFeatures(@RequestHeader("Authorization") String authorization,@PathVariable("modelNumber") String modelNumber,@RequestParam("title") String title,@RequestParam("description") String description){
         try {
