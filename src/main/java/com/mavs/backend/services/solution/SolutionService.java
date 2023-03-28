@@ -96,15 +96,15 @@ public class SolutionService {
             solution.setProductused(hashSet.toArray(strArray));
             solutionDao.save(solution);
 
-            List<SolutionCategory> solutionCategories = solutionCategoryDao.findAll();
-            if(solutionCategories!=null){
-                for(int i=0;i<solutionCategories.size();i++){
-                    if(solcategory.equals(solutionCategories.get(i).getCategory())){
-                        solutionCategories.get(i).getSolutions().add(solution);
-                        solutionCategoryDao.save(solutionCategories.get(i));
-                    }
-                }
-            } 
+            // List<SolutionCategory> solutionCategories = solutionCategoryDao.findAll();
+            // if(solutionCategories!=null){
+            //     for(int i=0;i<solutionCategories.size();i++){
+            //         if(solcategory.equals(solutionCategories.get(i).getCategory())){
+            //             solutionCategories.get(i).getSolutions().add(solution);
+            //             solutionCategoryDao.save(solutionCategories.get(i));
+            //         }
+            //     }
+            // } 
 
             List<Home> homes = homeDao.findAll();
             for(int i=0;i<homes.size();i++){
@@ -122,32 +122,32 @@ public class SolutionService {
                 
             }
 
-            // List<SolutionCategory> solutionCategories2 = solutionCategoryDao.findAll();
-            // boolean flag = false;
-            // Solution sol = new Solution();
-            // for(int i=0;i<solutionCategories2.size();i++){
-            //     if(solutionCategories2.get(i).getCategory().equals(solcategory)){
-            //         for(int j=0;j<solutionCategories2.get(i).getSolutions().size();j++){
-            //             if(solutionCategories2.get(i).getSolutions().get(j).getTitle().equals(title)){
-            //                 flag=true;
-            //                 sol = solutionCategories2.get(i).getSolutions().get(j);
-            //                 break;
-            //             }else{
-            //                 flag = false;
-            //             }
-            //         }
-            //         if(!flag){
-            //             solutionCategories2.get(i).getSolutions().add(solution);
-            //             solutionCategoryDao.save(solutionCategories2.get(i));
-            //         }
-            //         else{
-            //             solutionCategories2.get(i).getSolutions().remove(sol);
-            //             solutionCategories2.get(i).getSolutions().add(solution);
-            //             solutionCategoryDao.save(solutionCategories2.get(i));
-            //         }
+            List<SolutionCategory> solutionCategories2 = solutionCategoryDao.findAll();
+            boolean flag = false;
+            Solution sol = new Solution();
+            for(int i=0;i<solutionCategories2.size();i++){
+                if(solutionCategories2.get(i).getCategory().equals(solcategory)){
+                    for(int j=0;j<solutionCategories2.get(i).getSolutions().size();j++){
+                        if(solutionCategories2.get(i).getSolutions().get(j).getTitle().equals(title)){
+                            flag=true;
+                            sol = solutionCategories2.get(i).getSolutions().get(j);
+                            break;
+                        }else{
+                            flag = false;
+                        }
+                    }
+                    if(!flag){
+                        solutionCategories2.get(i).getSolutions().add(solution);
+                        solutionCategoryDao.save(solutionCategories2.get(i));
+                    }
+                    else{
+                        solutionCategories2.get(i).getSolutions().remove(sol);
+                        solutionCategories2.get(i).getSolutions().add(solution);
+                        solutionCategoryDao.save(solutionCategories2.get(i));
+                    }
                     
-            //     }
-            // }
+                }
+            }
 
 
             responseMessage.setMessage("Solution saved successfully");
