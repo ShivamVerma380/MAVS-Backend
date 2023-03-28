@@ -87,11 +87,24 @@ public class ProductService {
             
             productDao.save(productDetail);
 
-            ProductCategory productCategory2 = productCategoryDao.findProductCategoryByProductcategory(productCategory);
-            if(productCategory2!=null){
-                productCategory2.getModelNum().add(modelNumber);
-                productCategoryDao.save(productCategory2);
+            // ProductCategory productCategory2 = productCategoryDao.findProductCategoryByProductcategory(productCategory);
+            // if(productCategory2!=null){
+            //     productCategory2.getModelNum().add(modelNumber);
+            //     productCategoryDao.save(productCategory2);
+            // }
+
+            ProductCategory productCategory3 = productCategoryDao.findProductCategoryByProductcategory(productCategory);
+            if(productCategory3!=null){
+                
+                for(int i=0;i<productCategory3.getModelNum().size();i++){
+                    if(productCategory3.getModelNum().get(i).equals(modelNumber)){
+                        productCategory3.getModelNum().remove(i);
+                    }
+                    productCategory3.getModelNum().add(modelNumber);
+                    productCategoryDao.save(productCategory3);
+                }
             }
+
             
             responseMessage.setMessage("Model saved successfully");
             return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
