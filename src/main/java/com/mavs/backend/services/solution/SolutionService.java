@@ -127,7 +127,8 @@ public class SolutionService {
                 homeDao.save(homes.get(i));
                 
             }
-
+            ArrayList<SolutionFeatures> solutionFeatures = new ArrayList<>();
+            ArrayList<SolutionBenefits> solutionBenefits = new ArrayList<>();
             List<SolutionCategory> solutionCategories2 = solutionCategoryDao.findAll();
             boolean flag = false;
             Solution sol = new Solution();
@@ -138,6 +139,8 @@ public class SolutionService {
                         if(solutionCategories2.get(i).getSolutions().get(j).getTitle().equals(title)){
                             System.out.println("inside second if");
                             flag=true;
+                            solutionFeatures = solutionCategories2.get(i).getSolutions().get(j).getSolutionFeatures();
+                            solutionBenefits = solutionCategories2.get(i).getSolutions().get(j).getSolutionBenefits();                          
                             solutionCategories2.get(i).getSolutions().remove(j);
                             // sol = solutionCategories2.get(i).getSolutions().get(j);
                             break;
@@ -153,6 +156,8 @@ public class SolutionService {
                     else{
                         System.out.println("inside else");
                         // solutionCategories2.get(i).getSolutions().remove(sol);
+                        solution.setSolutionFeatures(solutionFeatures);
+                        solution.setSolutionBenefits(solutionBenefits);
                         solutionCategories2.get(i).getSolutions().add(0,solution);
                         solutionCategoryDao.save(solutionCategories2.get(i));
                     }
@@ -198,6 +203,7 @@ public class SolutionService {
             }else{
                 for(int i=0;i<list.size();i++){
                     if(list.get(i).getName().equals(name)){
+                        
                         list.remove(i);
                         flag = true;
                         index = i;
