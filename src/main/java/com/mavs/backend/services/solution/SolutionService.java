@@ -168,8 +168,7 @@ public class SolutionService {
                             System.out.println("inside second if");
                             flag1=true;
                             index3 = j;
-                            solutionFeatures = solutionCategories2.get(i).getSolutions().get(j).getSolutionFeatures();
-                            solutionBenefits = solutionCategories2.get(i).getSolutions().get(j).getSolutionBenefits();                          
+                                                  
                             solutionCategories2.get(i).getSolutions().remove(j);
                             // sol = solutionCategories2.get(i).getSolutions().get(j);
                             break;
@@ -185,8 +184,7 @@ public class SolutionService {
                     else{
                         System.out.println("inside else");
                         // solutionCategories2.get(i).getSolutions().remove(sol);
-                        solution.setSolutionFeatures(solutionFeatures);
-                        solution.setSolutionBenefits(solutionBenefits);
+                        
                         solutionCategories2.get(i).getSolutions().add(index3,solution);
                         solutionCategoryDao.save(solutionCategories2.get(i));
                     }
