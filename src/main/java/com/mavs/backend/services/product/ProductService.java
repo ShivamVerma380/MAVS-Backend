@@ -126,15 +126,28 @@ public class ProductService {
             // }
 
             ProductCategory productCategory3 = productCategoryDao.findProductCategoryByProductcategory(productCategory);
+            boolean flag1 = false;
+            int index = 0;
             if(productCategory3!=null){
                 
                 for(int i=0;i<productCategory3.getModelNum().size();i++){
                     if(productCategory3.getModelNum().get(i).equals(modelNumber)){
                         productCategory3.getModelNum().remove(i);
-                    }
+                        flag1 = true;
+                        index = i;
+                        break;
+                    }else{
+                        flag1 = false;
+                    }  
+                }
+                if(flag){
+                    productCategory3.getModelNum().add(index,modelNumber);
+                    productCategoryDao.save(productCategory3);
+                }else{
                     productCategory3.getModelNum().add(modelNumber);
                     productCategoryDao.save(productCategory3);
                 }
+                
             }
 
             
