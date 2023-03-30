@@ -94,7 +94,33 @@ public class SolutionService {
             }
             String[] strArray = new String[hashSet.size()];
             solution.setProductused(hashSet.toArray(strArray));
-            solutionDao.save(solution);
+            // solutionDao.save(solution);
+
+            ArrayList<SolutionFeatures> solutionFeatures = new ArrayList<>();
+            ArrayList<SolutionBenefits> solutionBenefits = new ArrayList<>();
+            List<Solution> solutions = solutionDao.findAll();
+            boolean flag = false;
+            
+            for(int i=0;i<solutions.size();i++){
+                if(solutions.get(i).getTitle().equals(title)){
+                    flag = true;
+                    solutionFeatures = solutions.get(i).getSolutionFeatures();
+                    solutionBenefits = solutions.get(i).getSolutionBenefits();
+                    break;
+                }
+                else{
+                    flag = false;
+                }
+            }
+            if(flag){
+                solution.setSolutionBenefits(solutionBenefits);
+                solution.setSolutionFeatures(solutionFeatures);
+                solutionDao.save(solution);
+            }
+            else{
+                solutionDao.save(solution);
+            }
+            
 
             // List<SolutionCategory> solutionCategories = solutionCategoryDao.findAll();
             // if(solutionCategories!=null){
@@ -127,10 +153,12 @@ public class SolutionService {
                 homeDao.save(homes.get(i));
                 
             }
-            ArrayList<SolutionFeatures> solutionFeatures = new ArrayList<>();
-            ArrayList<SolutionBenefits> solutionBenefits = new ArrayList<>();
+            
+
+
             List<SolutionCategory> solutionCategories2 = solutionCategoryDao.findAll();
-            boolean flag = false;
+            boolean flag1 = false;
+            int index3 = 0;
             Solution sol = new Solution();
             for(int i=0;i<solutionCategories2.size();i++){
                 if(solutionCategories2.get(i).getCategory().equals(solcategory)){
@@ -138,7 +166,8 @@ public class SolutionService {
                     for(int j=0;j<solutionCategories2.get(i).getSolutions().size();j++){
                         if(solutionCategories2.get(i).getSolutions().get(j).getTitle().equals(title)){
                             System.out.println("inside second if");
-                            flag=true;
+                            flag1=true;
+                            index3 = j;
                             solutionFeatures = solutionCategories2.get(i).getSolutions().get(j).getSolutionFeatures();
                             solutionBenefits = solutionCategories2.get(i).getSolutions().get(j).getSolutionBenefits();                          
                             solutionCategories2.get(i).getSolutions().remove(j);
@@ -146,10 +175,10 @@ public class SolutionService {
                             break;
                         }else{
                             
-                            flag = false;
+                            flag1 = false;
                         }
                     }
-                    if(!flag){
+                    if(!flag1){
                         solutionCategories2.get(i).getSolutions().add(solution);
                         solutionCategoryDao.save(solutionCategories2.get(i));
                     }
@@ -158,7 +187,7 @@ public class SolutionService {
                         // solutionCategories2.get(i).getSolutions().remove(sol);
                         solution.setSolutionFeatures(solutionFeatures);
                         solution.setSolutionBenefits(solutionBenefits);
-                        solutionCategories2.get(i).getSolutions().add(0,solution);
+                        solutionCategories2.get(i).getSolutions().add(index3,solution);
                         solutionCategoryDao.save(solutionCategories2.get(i));
                     }
                     
