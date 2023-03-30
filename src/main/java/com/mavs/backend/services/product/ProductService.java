@@ -85,7 +85,39 @@ public class ProductService {
             
             
             
-            productDao.save(productDetail);
+            // productDao.save(productDetail);
+
+            List<Product> products = productDao.findAll();
+            ArrayList<ProductDescription> productDescriptions = new ArrayList<>();
+            ArrayList<AdditionalFeatures> additionalFeatures = new ArrayList<>();
+            List<ProductSpecifications> productSpecifications = new ArrayList<>();
+            boolean flag = false;
+
+            for(int i=0;i<products.size();i++){
+                if(products.get(i).getModelNumber().equals(modelNumber)){
+                    productDescriptions = products.get(i).getProductDescriptions();
+                    additionalFeatures = products.get(i).getAdditionalFeatures();
+                    productSpecifications = products.get(i).getSpecifications();
+                    flag = true;
+                    break;
+
+
+                }
+                else{
+                    flag = false;
+                }
+            }
+            if(flag){
+                productDetail.setProductDescriptions(productDescriptions);
+                productDetail.setAdditionalFeatures(additionalFeatures);
+                productDetail.setSpecifications(productSpecifications);
+                productDao.save(productDetail);
+
+            }else{
+                productDao.save(productDetail);
+            }
+
+
 
             // ProductCategory productCategory2 = productCategoryDao.findProductCategoryByProductcategory(productCategory);
             // if(productCategory2!=null){

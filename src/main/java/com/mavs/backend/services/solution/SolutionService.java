@@ -247,6 +247,8 @@ public class SolutionService {
             solution.setSolutionFeatures(list);
             solutionDao.save(solution);
 
+            
+
             responseMessage.setMessage("Solution Details updated Successfully");
             return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
         } catch (Exception e) {
