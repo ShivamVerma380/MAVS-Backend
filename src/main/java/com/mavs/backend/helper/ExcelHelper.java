@@ -31,6 +31,7 @@ import com.mavs.backend.entities.product.FreeItem;
 import com.mavs.backend.entities.product.Product;
 import com.mavs.backend.entities.product.ProductCategory;
 import com.mavs.backend.entities.product.ProductDescription;
+import com.mavs.backend.entities.product.ProductSpecifications;
 import com.mavs.backend.entities.solution.Solution;
 import com.mavs.backend.entities.solution.SolutionBenefits;
 import com.mavs.backend.entities.solution.SolutionCategory;
@@ -296,9 +297,11 @@ public class ExcelHelper{
                         case 12:
                             try {
                                 HashMap<String,HashMap<String,String>> productSpecs = new HashMap<>();
+                                List<ProductSpecifications> productSpecifications = new ArrayList<>();
                                 value = formatter.formatCellValue(cell);
                                 if(value.trim().equals("-")){
                                     product.setProductSpecifications(new HashMap<>());
+                                    product.setSpecifications(new ArrayList<>());
                                     break;
                                 }
                                 String array[] = value.split("#");
