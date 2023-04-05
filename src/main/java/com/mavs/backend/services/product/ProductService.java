@@ -2,6 +2,7 @@ package com.mavs.backend.services.product;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -179,6 +180,19 @@ public class ProductService {
             List<ProductCategory> productCategories = productCategoryDao.findAll();
             if(productCategories!=null){
                 productCategoryDao.deleteAll();
+            }
+
+            List<Solution> solutions = solutionDao.findAll();
+            for(int i=0;i<solutions.size();i++){
+                String[] productsused = solutions.get(i).getProductused();
+                List<String> productusedlist = Arrays.asList(productsused);
+                for(int j=0;j<productusedlist.size();j++){
+                    productusedlist.clear();
+                }
+                String[] updatedproductsused = productusedlist.toArray(new String[productusedlist.size()]);
+                solutions.get(i).setProductused(updatedproductsused);
+
+                solutionDao.save(solutions.get(i));
             }
 
             responseMessage.setMessage("all products deleted successfully");
