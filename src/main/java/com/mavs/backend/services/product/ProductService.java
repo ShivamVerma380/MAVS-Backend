@@ -241,6 +241,21 @@ public class ProductService {
                 }
                 
             }
+
+            List<Solution> solutions = solutionDao.findAll();
+            for(int i=0;i<solutions.size();i++){
+                String[] productsused = solutions.get(i).getProductused();
+                List<String> productusedlist = Arrays.asList(productsused);
+                for(int j=0;j<productusedlist.size();i++){
+                    if(productusedlist.get(j).equals(modelNumber)){
+                        productusedlist.remove(j);
+                    }
+
+                }
+                String[] productsusedupdated = productusedlist.toArray(new String[productusedlist.size()]);
+                solutions.get(i).setProductused(productsusedupdated);
+                solutionDao.save(solutions.get(i));
+            }
             
 
 
