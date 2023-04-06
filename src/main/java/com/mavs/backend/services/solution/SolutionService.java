@@ -481,7 +481,8 @@ public class SolutionService {
                 List<ProductUsedResponse> models = new ArrayList<>();
                 for(int j=0;j<solutions.get(i).getProductused().length;j++){
                     ProductUsedResponse model = new ProductUsedResponse();
-                    Product product = productDao.findProductBymodelNumber(solutions.get(i).getProductused()[j]);
+                    Product product1 = productDao.findProductBymodelNumber(solutions.get(i).getProductused()[j]);
+                    Product product = productDao.findProductBymodelNumber(solutions.get(i).getProductusedlist().get(j));
 
                     model.setModelNum(product.getModelNumber());
                     model.setProductName(product.getProductName());
