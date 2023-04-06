@@ -305,10 +305,11 @@ public class ExcelHelper{
                                     product.setSpecifications(new ArrayList<>());
                                     break;
                                 }
-                                ProductSpecifications productSpecifications2 = new ProductSpecifications();
+                                
                                 String array[] = value.split("#");
                                 for(int i=0;i<array.length;i++){
                                     //System.out.println(array[i]);
+                                    ProductSpecifications productSpecifications2 = new ProductSpecifications();
                                     String subSplit[] = array[i].split("\\[");
                                     productSpecifications2.setHead(subSplit[0]);
                                     List<SpecificationDetails> specificationDetailsList = new ArrayList<>();
@@ -322,6 +323,8 @@ public class ExcelHelper{
                                     }
 
                                     productSpecifications2.setSpecs(specificationDetailsList);
+
+                                    productSpecifications.add(productSpecifications2);
                                     
                                 //     HashMap<String,String> mp = new HashMap<>();
                                 // // System.out.println(subSplit.length);
@@ -344,7 +347,9 @@ public class ExcelHelper{
                                 //     productSpecs.put(subSplit[0],mp);
                                 // }
                                 // product.setProductSpecifications(productSpecs);
+                                
                                 }
+                                product.setSpecifications(productSpecifications);
                             } catch (Exception e) {
                                 flag = false;
                                 System.out.println("Product Specifications:"+product.getModelNumber());
