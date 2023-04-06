@@ -479,7 +479,7 @@ public class SolutionService {
                 solutionResponse.setSolutionBenefits(solutions.get(i).getSolutionBenefits());
 
                 List<ProductUsedResponse> models = new ArrayList<>();
-                for(int j=0;j<solutions.get(i).getProductused().length;j++){
+                for(int j=0;j<solutions.get(i).getProductusedlist().size();j++){
                     ProductUsedResponse model = new ProductUsedResponse();
                     Product product1 = productDao.findProductBymodelNumber(solutions.get(i).getProductused()[j]);
                     Product product = productDao.findProductBymodelNumber(solutions.get(i).getProductusedlist().get(j));
@@ -519,14 +519,15 @@ public class SolutionService {
             solutionResponse.setSolutionFeatures(solution.getSolutionFeatures());
             solutionResponse.setSolutionBenefits(solution.getSolutionBenefits());
             List<ProductUsedResponse> productUsedResponses = new ArrayList<>();
-            for(int i=0;i<solution.getProductused().length;i++){
+            for(int i=0;i<solution.getProductusedlist().size();i++){
                 ProductUsedResponse productUsedResponse = new ProductUsedResponse();
-                Product product = productDao.findProductBymodelNumber(solution.getProductused()[i]);
+                Product product = productDao.findProductBymodelNumber(solution.getProductusedlist().get(i));
                 productUsedResponse.setModelNum(product.getModelNumber());
                 productUsedResponse.setProductName(product.getProductName());
                 productUsedResponse.setProductImage(product.getProductImage1());
                 productUsedResponses.add(productUsedResponse);
             }
+            // solutionResponse.setProductused(productUsedResponses);
             solutionResponse.setProductused(productUsedResponses);
             return ResponseEntity.status(HttpStatus.OK).body(solutionResponse);
         } catch (Exception e) {
