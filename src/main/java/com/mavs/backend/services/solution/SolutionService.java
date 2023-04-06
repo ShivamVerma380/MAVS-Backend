@@ -1,6 +1,7 @@
 package com.mavs.backend.services.solution;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -69,6 +70,7 @@ public class SolutionService {
             }
 
             String[] productsusedfinal = productsused.split(";");
+            List<String> productusedfinallist = Arrays.asList(productsusedfinal);
             System.out.println(productsusedfinal);
 
 
@@ -81,19 +83,20 @@ public class SolutionService {
             solution.setSolimg2(solimg2);
             solution.setSolimg3(solimg3);
             HashSet<String> hashSet = new HashSet<>();
-            for(int i=0;i<productsusedfinal.length;i++){
+            for(int i=0;i<productusedfinallist.size();i++){
                 try {
-                    Product product = productDao.findProductBymodelNumber(productsusedfinal[i]);
+                    Product product = productDao.findProductBymodelNumber(productusedfinallist.get(i));
                     if(product!=null){
-                        hashSet.add(productsusedfinal[i]);
+                        hashSet.add(productusedfinallist.get(i));
                     }
                 } catch (Exception e) {
                     // TODO: handle exception
                     e.printStackTrace();
                 }
             }
-            String[] strArray = new String[hashSet.size()];
-            solution.setProductused(hashSet.toArray(strArray));
+            
+            List<String> strList = new ArrayList<>(hashSet);
+            solution.setProductusedlist(strList);
             // solutionDao.save(solution);
 
             ArrayList<SolutionFeatures> solutionFeatures = new ArrayList<>();

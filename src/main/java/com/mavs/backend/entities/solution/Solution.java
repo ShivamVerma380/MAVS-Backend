@@ -1,6 +1,7 @@
 package com.mavs.backend.entities.solution;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -32,12 +33,14 @@ public class Solution {
 
     private String[] productused;
 
+    private List<String> productusedlist;
+
     public Solution() {
     }
 
     public Solution(String title, String description, String coverimg,String solcategory, ArrayList<SolutionFeatures> solutionFeatures,
             ArrayList<SolutionBenefits> solutionBenefits, String solimg1, String solimg2, String solimg3,
-            String[] productused) {
+            String[] productused,List<String> productusedlist) {
         this.title = title;
         this.description = description;
         this.coverimg = coverimg;
@@ -48,6 +51,7 @@ public class Solution {
         this.solimg3 = solimg3;
         this.productused = productused;
         this.solcategory = solcategory;
+        this.productusedlist = productusedlist;
     }
 
     public String getTitle() {
@@ -130,12 +134,22 @@ public class Solution {
         this.solcategory = solcategory;
     }
 
+    
+
     @Override
     public String toString() {
-        return "Solution [coverimg=" + coverimg + ", description=" + description + ", productused=" + productused
-                + ", solcategory=" + solcategory + ", solimg1=" + solimg1 + ", solimg2=" + solimg2 + ", solimg3="
-                + solimg3 + ", solutionBenefits=" + solutionBenefits + ", solutionFeatures=" + solutionFeatures
-                + ", title=" + title + "]";
+        return "Solution [title=" + title + ", description=" + description + ", coverimg=" + coverimg + ", solcategory="
+                + solcategory + ", solutionFeatures=" + solutionFeatures + ", solutionBenefits=" + solutionBenefits
+                + ", solimg1=" + solimg1 + ", solimg2=" + solimg2 + ", solimg3=" + solimg3 + ", productused="
+                + Arrays.toString(productused) + ", productusedlist=" + productusedlist + "]";
+    }
+
+    public List<String> getProductusedlist() {
+        return productusedlist;
+    }
+
+    public void setProductusedlist(List<String> productusedlist) {
+        this.productusedlist = productusedlist;
     }
 
     
