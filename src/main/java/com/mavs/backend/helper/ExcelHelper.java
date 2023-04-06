@@ -32,6 +32,7 @@ import com.mavs.backend.entities.product.Product;
 import com.mavs.backend.entities.product.ProductCategory;
 import com.mavs.backend.entities.product.ProductDescription;
 import com.mavs.backend.entities.product.ProductSpecifications;
+import com.mavs.backend.entities.product.SpecificationDetails;
 import com.mavs.backend.entities.solution.Solution;
 import com.mavs.backend.entities.solution.SolutionBenefits;
 import com.mavs.backend.entities.solution.SolutionCategory;
@@ -304,31 +305,46 @@ public class ExcelHelper{
                                     product.setSpecifications(new ArrayList<>());
                                     break;
                                 }
+                                ProductSpecifications productSpecifications2 = new ProductSpecifications();
                                 String array[] = value.split("#");
                                 for(int i=0;i<array.length;i++){
                                     //System.out.println(array[i]);
                                     String subSplit[] = array[i].split("\\[");
-                                    HashMap<String,String> mp = new HashMap<>();
-                                // System.out.println(subSplit.length);
-                                    String x = subSplit[1];
-                                    String innermap = x.substring(0,x.length()-1);
-                                    //System.out.println("0:"+subSplit[0]+"\t1:"+innermap);
-                                    String keyValue[] = innermap.split(";");
-                                    for(int j=0;j<keyValue.length;j++){
-                                        //System.out.println("KeyValue:"+keyValue[j]);
-                                        String pair[] = keyValue[j].split("=");
-                                        try {
-                                            //System.out.println("pair[0]="+pair[0]+"\tpair[1]="+pair[1]);
-                                            mp.put(pair[0],pair[1]);
-                                        } catch (Exception e) {
-                                            // e.printStackTrace();
-                                            flag = false;
-                                            System.out.println("Product Specifications:"+product.getModelNumber());
-                                        }
+                                    productSpecifications2.setHead(subSplit[0]);
+                                    List<SpecificationDetails> specificationDetailsList = new ArrayList<>();
+                                    String[] specsarray = subSplit[1].split(";");
+                                    for(int j=0;j<specsarray.length;j++){
+                                        String[] keyvalue = specsarray[i].split(":=");
+                                        SpecificationDetails specificationDetails = new SpecificationDetails();
+                                        specificationDetails.setKey(keyvalue[0]);
+                                        specificationDetails.setValue(keyvalue[1]);
+                                        specificationDetailsList.add(specificationDetails);
                                     }
-                                    productSpecs.put(subSplit[0],mp);
+
+                                    productSpecifications2.setSpecs(specificationDetailsList);
+                                    
+                                //     HashMap<String,String> mp = new HashMap<>();
+                                // // System.out.println(subSplit.length);
+                                //     String x = subSplit[1];
+                                //     String innermap = x.substring(0,x.length()-1);
+                                //     //System.out.println("0:"+subSplit[0]+"\t1:"+innermap);
+                                //     String keyValue[] = innermap.split(";");
+                                //     for(int j=0;j<keyValue.length;j++){
+                                //         //System.out.println("KeyValue:"+keyValue[j]);
+                                //         String pair[] = keyValue[j].split("=");
+                                //         try {
+                                //             //System.out.println("pair[0]="+pair[0]+"\tpair[1]="+pair[1]);
+                                //             mp.put(pair[0],pair[1]);
+                                //         } catch (Exception e) {
+                                //             // e.printStackTrace();
+                                //             flag = false;
+                                //             System.out.println("Product Specifications:"+product.getModelNumber());
+                                //         }
+                                //     }
+                                //     productSpecs.put(subSplit[0],mp);
+                                // }
+                                // product.setProductSpecifications(productSpecs);
                                 }
-                                product.setProductSpecifications(productSpecs);
                             } catch (Exception e) {
                                 flag = false;
                                 System.out.println("Product Specifications:"+product.getModelNumber());
