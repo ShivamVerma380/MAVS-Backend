@@ -184,13 +184,9 @@ public class ProductService {
 
             List<Solution> solutions = solutionDao.findAll();
             for(int i=0;i<solutions.size();i++){
-                String[] productsused = solutions.get(i).getProductused();
-                List<String> productusedlist = Arrays.asList(productsused);
-                for(int j=0;j<productusedlist.size();j++){
-                    productusedlist.clear();
+                for(int j=0;j<solutions.get(i).getProductusedlist().size();j++){
+                    solutions.get(i).getProductusedlist().clear();
                 }
-                String[] updatedproductsused = productusedlist.toArray(new String[productusedlist.size()]);
-                solutions.get(i).setProductused(updatedproductsused);
 
                 solutionDao.save(solutions.get(i));
             }
